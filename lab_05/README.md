@@ -11,6 +11,19 @@
 
 ---
 
+## 👥 Distribución del Trabajo por Integrante y Ramas Git
+
+Para garantizar la trazabilidad individual y el trabajo en equipo exigido por la cátedra, el desarrollo del Laboratorio 05 se encuentra dividido en 4 módulos distribuidos en sus respectivas ramas de GitHub:
+
+| N.° | Integrante | Código | Rama Git | Módulo Asignado | Componentes y Archivos Principales |
+| :---: | :--- | :---: | :---: | :--- | :--- |
+| 1 | **Choquenaira Quispe, Noe Franklin** | 133962 | `ramaFranki` | **Google Colab y Entorno Interactivo** | `lab_05/colab/` (Cuaderno `grupo 5 guia 05.ipynb` pre-ejecutado con salidas inline, generador `generate_lab05_notebook.py`, `colab/README.md`). |
+| 2 | **Quispe Rimachi, Romario** | 164257 | `RamaRomario` | **Splay Trees y Ejercicios Resueltos** | `lab_05/codigo py/splay_tree.py`, `resuelto_01_splay_instrumentado.py`, `resuelto_02_splay_operaciones.py`, `visualizacion_splay.py`, figuras Splay. |
+| 3 | **Porroa Sivana, Yeni Ruth** | 120893 | `ramaYeni` | **Link-Cut Trees y Pruebas Unitarias** | `lab_05/codigo py/link_cut_tree.py`, `reference_forest.py`, `resuelto_03_bosque_referencia.py`, `propuesto_01_link_cut_tree.py`, `pruebas/`, figuras Link-Cut. |
+| 4 | **Yaranga Achahui, Aldo** | 103179 | `ramaAldo` | **Experimentos, Benchmarks e Informe LaTeX** | `lab_05/codigo py/lab05_pipeline.py`, `propuesto_02_pruebas_experimentos.py`, `resultados/`, `trazas/`, `lab_05/latex/` (informe formal de 13 páginas APA 7), scripts de compilación. |
+
+---
+
 ## 1. Estructura del Repositorio
 
 El proyecto mantiene la misma organización modular y rigor de entrega del Laboratorio 04:
