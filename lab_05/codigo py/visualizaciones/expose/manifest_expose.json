@@ -1,0 +1,82 @@
+{
+  "target": 6,
+  "represented_edges_before": [
+    [
+      1,
+      2
+    ],
+    [
+      1,
+      3
+    ],
+    [
+      2,
+      4
+    ],
+    [
+      2,
+      5
+    ],
+    [
+      3,
+      6
+    ],
+    [
+      3,
+      7
+    ]
+  ],
+  "represented_edges_after": [
+    [
+      1,
+      2
+    ],
+    [
+      1,
+      3
+    ],
+    [
+      2,
+      4
+    ],
+    [
+      2,
+      5
+    ],
+    [
+      3,
+      6
+    ],
+    [
+      3,
+      7
+    ]
+  ],
+  "frames": [
+    "F:\\unsaac\\alg-avanzados\\lab_05\\codigo py\\visualizaciones\\expose\\fig_expose_00_representado_antes.png",
+    "F:\\unsaac\\alg-avanzados\\lab_05\\codigo py\\visualizaciones\\expose\\fig_expose_01_caminos_preferidos.png",
+    "F:\\unsaac\\alg-avanzados\\lab_05\\codigo py\\visualizaciones\\expose\\fig_expose_02_auxiliares_antes.png",
+    "F:\\unsaac\\alg-avanzados\\lab_05\\codigo py\\visualizaciones\\expose\\fig_expose_03_splay.png",
+    "F:\\unsaac\\alg-avanzados\\lab_05\\codigo py\\visualizaciones\\expose\\fig_expose_04_splay.png",
+    "F:\\unsaac\\alg-avanzados\\lab_05\\codigo py\\visualizaciones\\expose\\fig_expose_05_preferida.png",
+    "F:\\unsaac\\alg-avanzados\\lab_05\\codigo py\\visualizaciones\\expose\\fig_expose_06_splay.png",
+    "F:\\unsaac\\alg-avanzados\\lab_05\\codigo py\\visualizaciones\\expose\\fig_expose_07_auxiliar_final.png",
+    "F:\\unsaac\\alg-avanzados\\lab_05\\codigo py\\visualizaciones\\expose\\fig_expose_08_representado_despues.png"
+  ],
+  "final": {
+    "final_auxiliary": "F:\\unsaac\\alg-avanzados\\lab_05\\codigo py\\visualizaciones\\expose\\fig_expose_07_auxiliar_final.png",
+    "represented_after": "F:\\unsaac\\alg-avanzados\\lab_05\\codigo py\\visualizaciones\\expose\\fig_expose_08_representado_despues.png",
+    "panel": "F:\\unsaac\\alg-avanzados\\lab_05\\codigo py\\figuras\\fig_expose_resumen.png"
+  },
+  "stats": {
+    "rotations": 31,
+    "splays": 68,
+    "exposes": 22,
+    "lazy_reversals": 17,
+    "pushes": 179,
+    "updates": 145,
+    "links": 6,
+    "cuts": 0,
+    "validations": 2
+  }
+}
