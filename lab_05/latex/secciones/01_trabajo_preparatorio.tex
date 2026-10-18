@@ -1,0 +1,28 @@
+% !TEX root = ../main.tex
+\section{Trabajo preparatorio obligatorio}
+
+\subsection{Rotaciones en BST, autoajuste (\texttt{splay}) y diccionario}
+Una rotación local en un BST reacomoda punteros entre un nodo $x$ y su padre $p$ en tiempo $O(1)$, \textbf{conservando estrictamente el recorrido simétrico (\textit{in-order})}. La operación \texttt{splay(x)} asciende a $x$ hasta la raíz mediante tres casos:
+(1)~\textbf{Zig ($p$ es raíz):} rotación simple entre $x$ y $p$;
+(2)~\textbf{Zig-zig (mismo sentido):} rota primero $p$ sobre el abuelo $g$, y luego $x$ sobre $p$, dividiendo la profundidad a la mitad; y
+(3)~\textbf{Zig-zag (sentidos opuestos):} rota $x$ sobre $p$ y luego $x$ sobre $g$.
+En el diccionario, \texttt{search} eleva la clave (o último visitado) a la raíz; \texttt{insert} enlaza la hoja y aplica splay; y \texttt{delete} sube la clave, desvincula subárboles $L$ y $R$, y enlaza $R$ al máximo de $L$ (\texttt{join}).
+
+\subsection{Árbol representado vs. árboles auxiliares (Link-Cut Tree)}
+El Link-Cut Tree opera sobre dos niveles diferenciados:
+\begin{itemize}\setlength\itemsep{0pt}\setlength\parskip{0pt}
+    \item \textbf{Árbol representado:} Grafo lógico conexo cuyas aristas solo cambian con \texttt{link} o \texttt{cut}.
+    \item \textbf{Árboles auxiliares (Splay Trees):} Partición en caminos preferidos. Su recorrido \textit{in-order} codifica la \textbf{profundidad lógica}, no la clave. Rotar en el auxiliar \textbf{no modifica aristas reales del bosque}.
+    \item \textbf{Aristas preferidas vs. virtuales:} Las sólidas unen nodos del camino preferido; las virtuales (\textit{path-parent}) unen la raíz auxiliar con su nodo superior lógico, sin que este la reconozca como hijo.
+\end{itemize}
+
+\subsection{Operaciones del bosque dinámico y cota amortizada}
+\begin{itemize}\setlength\itemsep{0pt}\setlength\parskip{0pt}
+    \item \texttt{EXPOSE(v)}: Unifica el camino raíz $\to v$ en un único auxiliar con $v$ en su raíz.
+    \item \texttt{MAKE-ROOT(v)}: Expone a $v$ e invierte el camino mediante \texttt{reversed = True}.
+    \item \texttt{FIND-ROOT(v)}: Expone a $v$ y desciende por la izquierda del auxiliar hasta la raíz lógica.
+    \item \texttt{LINK(u, v)}: Enlaza componentes haciendo a $u$ hijo de $v$; valida aciclicidad con \texttt{connected}.
+    \item \texttt{CUT(u, v)}: Desconecta la arista física directa entre $u$ y $v$; rechaza cortes inválidos con \texttt{ValueError}.
+    \item \texttt{PATH-SUM(u, v)}: Re-enraíza en $u$, expone $v$ y lee el acumulador \texttt{v.path\_sum} en tiempo $O(1)$.
+\end{itemize}
+Aunque una operación aislada cueste $O(n)$, el potencial de Sleator-Tarjan garantiza un costo promedio amortizado de $O(\log n)$ sobre cualquier secuencia arbitraria de operaciones.

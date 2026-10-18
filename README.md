@@ -48,6 +48,7 @@ Cada laboratorio incluye:
 | **Lab 02** | Scheduling en Máquinas Paralelas ($Pm \parallel C_{\max}$) | List Scheduling (LS), Longest Processing Time (LPT), Branch & Bound exacto | Cota de Graham: $r \le 2 - \frac{1}{m}$ (LS) y $r \le \frac{4}{3} - \frac{1}{3m}$ (LPT) |
 | **Lab 03** | Aproximación Avanzada: Vertex Cover y FPTAS | Algoritmo 2-Aproximado por Matching Maximal, DP por Valores, Knapsack FPTAS con escalamiento $K = \frac{\varepsilon V_{\max}}{n}$ | Vertex Cover: $|C| \le 2\,\text{OPT}$<br>FPTAS: $\text{ALG}_\varepsilon \ge (1-\varepsilon)\,\text{OPT}$, $O(n^3/\varepsilon)$ |
 | **Lab 04** | Montículos de Fibonacci y Análisis Amortizado | Montículo de Fibonacci con punteros circulares, consolidación por grados, cortes en cascada, `heapq` perezoso y Dijkstra | Potencial: $\Phi(H) = t(H) + 2m(H)$<br>`insert`: $O(1)$, `decrease-key`: $O(1)$, `extract-min`: $O(\log n)$<br>Dijkstra: $O(|E| + |V|\log |V|)$ |
+| **Lab 05** | Splay Trees y Árboles Dinámicos Link-Cut | Splay Tree autoajustable, partición en caminos preferidos, Link-Cut Forest con punteros virtuales (*path-parent*), reversión perezosa, sumas de camino | Potencial Sleator-Tarjan: $O(\log n)$ amortizado por operación<br>9 invariantes estructurales validadas al 100%<br>15,000 operaciones diferenciales con 0 discrepancias frente a BFS |
 
 ---
 
@@ -135,6 +136,38 @@ UNSAAC-algoritmos-avanzados/
 │       ├── figuras/                            # Gráficos y escudo institucional
 │       └── secciones/                          # Secciones del informe (00 a 05)
 │
+├── lab_05/                                     # Laboratorio 05: Splay Trees y Árboles Dinámicos Link-Cut
+│   ├── Guia 05.pdf                             # Guía oficial del laboratorio
+│   ├── compilar_informe.bat                    # Compilador directo del informe PDF
+│   ├── modo_en_vivo.bat                        # Compilador continuo en tiempo real
+│   ├── README.md                               # Documentación técnica completa de Lab 05
+│   │
+│   ├── colab/                                  # Entorno interactivo para Google Colab y Jupyter
+│   │   ├── grupo 5 guia 05.ipynb               # Cuaderno interactivo oficial con 23 celdas pre-ejecutadas
+│   │   ├── generate_lab05_notebook.py          # Script generador y pre-ejecutor del cuaderno
+│   │   └── README.md                           # Instrucciones de uso en Google Colab
+│   │
+│   ├── codigo py/                              # Suite modular en Python 3.12 puro
+│   │   ├── splay_tree.py                       # Clase SplayTree con rotaciones, splay, split y join
+│   │   ├── reference_forest.py                 # Modelo BFS canónico (oráculo de pruebas)
+│   │   ├── link_cut_tree.py                    # Implementación integral de LinkCutForest y 9 invariantes
+│   │   ├── visualizations.py                   # Generador gráfico de figuras didácticas de splay y EXPOSE
+│   │   ├── lab05_pipeline.py                   # Pipeline experimental completo (Escenarios A, B y C)
+│   │   ├── ejecutar_todo.py                    # Ejecutor maestro de todo el laboratorio
+│   │   ├── resuelto_*.py                       # Scripts ejecutables de ejercicios resueltos 1, 2 y 3
+│   │   ├── propuesto_*.py                      # Scripts ejecutables de ejercicios propuestos 1 y 2
+│   │   ├── figuras/                            # Figuras de alta resolución exportadas
+│   │   ├── resultados/                         # Archivos CSV de métricas experimentales
+│   │   └── trazas/                             # Logs de auditoría JSONL de secuencias diferenciales
+│   │
+│   └── latex/                                  # Informe académico formal en LaTeX (APA 7)
+│       ├── main.tex                            # Documento maestro
+│       ├── main.pdf                            # PDF compilado final (1341 KB)
+│       ├── compilar.py / compilar.bat          # Compilador automatizado 2-pass
+│       ├── watch_live.py / iniciar_*.bat       # Modo en vivo con debounce
+│       ├── figuras/                            # 20 figuras de alta resolución y escudo UNSAAC
+│       └── secciones/                          # Secciones modulares del informe (00 a 06)
+│
 ├── .gitignore                                  # Exclusión de temporales y compilados
 ├── requirements.txt                            # Dependencias necesarias
 └── README.md                                   # Documentación principal del repositorio
@@ -200,17 +233,37 @@ python ejecutar_todo.py
   ```
 * **Compilar informe PDF:** Doble clic en `lab_04/compilar_informe.bat` o `lab_04/modo_en_vivo.bat`.
 
+### Laboratorio 05: Splay Trees y Árboles Dinámicos Link-Cut
+```bash
+cd "lab_05/codigo py"
+python ejecutar_todo.py
+```
+* **Ejecución modular de ejercicios:**
+  ```bash
+  python resuelto_01_splay_instrumentado.py
+  python resuelto_02_splay_operaciones.py
+  python resuelto_03_bosque_referencia.py
+  python propuesto_01_link_cut_tree.py
+  python propuesto_02_pruebas_experimentos.py
+  python visualizacion_splay.py
+  python visualizacion_expose.py
+  ```
+* **Cuaderno interactivo oficial:** Abrir `lab_05/colab/grupo 5 guia 05.ipynb` en Google Colab o JupyterLab (23 celdas completamente pre-ejecutadas con gráficos y tablas inline).
+* **Compilar informe PDF:** Doble clic en `lab_05/compilar_informe.bat` o `lab_05/modo_en_vivo.bat`.
+
 ---
 
-## 🔬 Aspectos Teóricos Clave Evaluados en Lab 04
+## 🔬 Aspectos Teóricos Clave Evaluados en Lab 04 y Lab 05
 
-### 1. Función de Potencial y Análisis Amortizado
+### 1. Montículos de Fibonacci y Análisis Amortizado (Lab 04)
 * **Función de Potencial Contable:** Definida como $\Phi(H) = t(H) + 2m(H)$, donde $t(H)$ es el número de árboles en la lista de raíces y $m(H)$ la cantidad de nodos internos marcados.
 * **Compensación de Reestructuraciones:** Cada inserción aporta $+1$ de potencial que amortiza los enlaces durante la consolidación de `extract-min`. Cada nodo marcado acumula $+2$, financiando su corte futuro y desmarcado cuando sufre un corte en cascada ($\Delta \Phi = -1$).
 * **Cotas Garantizadas:**
   $$\hat{c}_{\text{insert}} \in O(1), \quad \hat{c}_{\text{union}} \in O(1), \quad \hat{c}_{\text{decrease-key}} \in O(1), \quad \hat{c}_{\text{extract-min}} \in O(\log n)$$
 
-### 2. Comparación Empírica frente a `heapq` y Algoritmo de Dijkstra
-* **Locality vs. Asintótica:** Para operaciones estándar de inserción y extracción, `heapq` supera a Fibonacci debido a su implementación en lenguaje C optimizado sobre memoria contigua.
-* **Ventaja en Disminuciones Intensivas ($q = 10n$):** Fibonacci demostró ser más rápido que `heapq` (2\,721 ms vs. 3\,307 ms para 200\,000 disminuciones) gracias a su cota $O(1)$, mientras que `heapq` sufrió una degradación temporal y espacial al inflar su tamaño físico en un factor de $15\times$ (148\,731 entradas físicas frente a 10\,000 activas) debido a la acumulación de entradas obsoletas (`REMOVED`).
-* **Dijkstra en Grafos Densos:** Fibonacci calcula distancias 100% idénticas a `heapq`, reduciendo asintóticamente el tiempo de Dijkstra de $O(|E|\log |V|)$ a $O(|E| + |V|\log |V|)$.
+### 2. Splay Trees y Bosques Dinámicos Link-Cut (Lab 05)
+* **Descomposición en Caminos Preferidos y Árboles Auxiliares:** El bosque representado se particiona en caminos dirigidos disjuntos en vértices. Cada camino se almacena en un Splay Tree auxiliar cuyo recorrido *in-order* preserva la profundidad relativa de menor a mayor.
+* **Punteros Virtuales (*path-parent*):** El puntero `parent` cumple un doble papel fundamental: enlaza nodos dentro del árbol auxiliar y, cuando el padre no reconoce al nodo como hijo (`_is_aux_root`), actúa como conexión virtual hacia el árbol auxiliar superior en el bosque representado.
+* **Operación `EXPOSE(v)` y Cota Amortizada $O(\log n)$:** Reconfigura las aristas preferidas para conectar el camino desde la raíz representada hasta $v$ en un único árbol auxiliar con $v$ en su raíz auxiliar. Mediante el análisis potencial de Sleator-Tarjan, cualquier secuencia válida de operaciones sobre el Link-Cut Forest (`link`, `cut`, `connected`, `path_sum`, `make_root`) posee costo amortizado $O(\log n)$.
+* **Validación Diferencial Rigurosa:** Contrastación de **15,000 operaciones aleatorias** sobre grafos dinámicos frente a un oráculo canónico BFS (`ReferenceForest`), reportando **0 discrepancias** y garantizando la preservación estricta de **9 invariantes estructurales** en cada paso.
+
