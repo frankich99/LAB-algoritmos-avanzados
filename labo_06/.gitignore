@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.ipynb_checkpoints/
+
+# LaTeX auxiliary files
+*.aux
+*.log
+*.toc
+*.lof
+*.lot
+*.out
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+compilacion.log
+
+# VS Code & OS
+.vscode/
+Thumbs.db
+.DS_Store
+
+# Archivos grandes / comprimidos
+*.zip
