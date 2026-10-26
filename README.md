@@ -49,6 +49,7 @@ Cada laboratorio incluye:
 | **Lab 03** | Aproximación Avanzada: Vertex Cover y FPTAS | Algoritmo 2-Aproximado por Matching Maximal, DP por Valores, Knapsack FPTAS con escalamiento $K = \frac{\varepsilon V_{\max}}{n}$ | Vertex Cover: $|C| \le 2\,\text{OPT}$<br>FPTAS: $\text{ALG}_\varepsilon \ge (1-\varepsilon)\,\text{OPT}$, $O(n^3/\varepsilon)$ |
 | **Lab 04** | Montículos de Fibonacci y Análisis Amortizado | Montículo de Fibonacci con punteros circulares, consolidación por grados, cortes en cascada, `heapq` perezoso y Dijkstra | Potencial: $\Phi(H) = t(H) + 2m(H)$<br>`insert`: $O(1)$, `decrease-key`: $O(1)$, `extract-min`: $O(\log n)$<br>Dijkstra: $O(|E| + |V|\log |V|)$ |
 | **Lab 05** | Splay Trees y Árboles Dinámicos Link-Cut | Splay Tree autoajustable, partición en caminos preferidos, Link-Cut Forest con punteros virtuales (*path-parent*), reversión perezosa, sumas de camino | Potencial Sleator-Tarjan: $O(\log n)$ amortizado por operación<br>9 invariantes estructurales validadas al 100%<br>15,000 operaciones diferenciales con 0 discrepancias frente a BFS |
+| **Lab 06** | Algoritmos de Teoría de Números y Aritmética Modular | MCD Euclides clásico y extendido ($ax+by=d$), Inversos modulares, Congruencias lineales, Exponenciación binaria modular ($O(\log b)$) y Teorema Chino del Resto (TCR) analítico con traza | Teorema de Lamé: $k \le 5\log_{10}(\min(a,b)) + 1$<br>Bezout: $ax \equiv d \pmod m$<br>Potencia rápida: $\le 2\lfloor\log_2 b\rfloor$ mults vs $b-1$<br>TCR: solución única $\pmod M$ con $\gcd(m_i, m_j)=1$ |
 
 ---
 
@@ -168,6 +169,33 @@ UNSAAC-algoritmos-avanzados/
 │       ├── figuras/                            # 20 figuras de alta resolución y escudo UNSAAC
 │       └── secciones/                          # Secciones modulares del informe (00 a 06)
 │
+├── labo_06/                                    # Laboratorio 06: Algoritmos de Teoría de Números y Aritmética Modular
+│   ├── Guia 06.pdf                             # Guía oficial del laboratorio
+│   ├── compilar_informe.bat                    # Compilador directo del informe PDF
+│   ├── modo_en_vivo.bat                        # Compilador continuo en tiempo real
+│   ├── README.md                               # Documentación técnica y matriz de integrantes de Lab 06
+│   │
+│   ├── colab/                                  # Entorno interactivo para Google Colab y Jupyter
+│   │   ├── grupo 5 guia 06.ipynb               # Cuaderno interactivo oficial con salidas y gráficos inline
+│   │   └── README.md                           # Guía para abrir y ejecutar en Google Colab
+│   │
+│   ├── python/                                 # Suite modular en Python 3.12 puro
+│   │   ├── number_theory.py                    # Biblioteca central (MCD, Euclides Ext, congruencias, TCR)
+│   │   ├── test_number_theory.py               # Suite automatizada de 34 pruebas unitarias
+│   │   ├── ejercicios_resueltos.py             # Implementación de ejercicios resueltos 1, 2 y 3
+│   │   ├── case_generator.py                   # Generador determinista de casos de prueba
+│   │   ├── experiments.py                      # Batería experimental completa (Escenarios A, B y C)
+│   │   ├── figures/                            # 4 figuras estadísticas de alta resolución (300 DPI)
+│   │   └── results/                            # Tablas CSV de resultados experimentales y trazas
+│   │
+│   └── latex/                                  # Informe académico formal en LaTeX (APA 7, 17 páginas)
+│       ├── main.tex                            # Documento maestro
+│       ├── main.pdf                            # PDF compilado final (17 páginas, sin referencias)
+│       ├── compilar.py / compilar.bat          # Compilador automatizado 2-pass con pdflatex
+│       ├── watch_live.py / iniciar_*.bat       # Modo en vivo con debounce continuo
+│       ├── figuras/                            # Gráficos empíricos y escudo institucional
+│       └── secciones/                          # Secciones modulares del informe (00 a 06)
+│
 ├── .gitignore                                  # Exclusión de temporales y compilados
 ├── requirements.txt                            # Dependencias necesarias
 └── README.md                                   # Documentación principal del repositorio
@@ -251,9 +279,19 @@ python ejecutar_todo.py
 * **Cuaderno interactivo oficial:** Abrir `lab_05/colab/grupo 5 guia 05.ipynb` en Google Colab o JupyterLab (23 celdas completamente pre-ejecutadas con gráficos y tablas inline).
 * **Compilar informe PDF:** Doble clic en `lab_05/compilar_informe.bat` o `lab_05/modo_en_vivo.bat`.
 
+### Laboratorio 06: Algoritmos Fundamentales de Teoría de Números
+```bash
+cd "labo_06/python"
+python test_number_theory.py
+python experiments.py
+python ejercicios_resueltos.py
+```
+* **Cuaderno interactivo oficial:** Abrir `labo_06/colab/grupo 5 guia 06.ipynb` en Google Colab o JupyterLab (autónomo, con suite de 34 pruebas y gráficos inline).
+* **Compilar informe PDF:** Doble clic en `labo_06/compilar_informe.bat` o `labo_06/modo_en_vivo.bat`.
+
 ---
 
-## 🔬 Aspectos Teóricos Clave Evaluados en Lab 04 y Lab 05
+## 🔬 Aspectos Teóricos Clave Evaluados en Lab 04, Lab 05 y Lab 06
 
 ### 1. Montículos de Fibonacci y Análisis Amortizado (Lab 04)
 * **Función de Potencial Contable:** Definida como $\Phi(H) = t(H) + 2m(H)$, donde $t(H)$ es el número de árboles en la lista de raíces y $m(H)$ la cantidad de nodos internos marcados.
@@ -266,4 +304,10 @@ python ejecutar_todo.py
 * **Punteros Virtuales (*path-parent*):** El puntero `parent` cumple un doble papel fundamental: enlaza nodos dentro del árbol auxiliar y, cuando el padre no reconoce al nodo como hijo (`_is_aux_root`), actúa como conexión virtual hacia el árbol auxiliar superior en el bosque representado.
 * **Operación `EXPOSE(v)` y Cota Amortizada $O(\log n)$:** Reconfigura las aristas preferidas para conectar el camino desde la raíz representada hasta $v$ en un único árbol auxiliar con $v$ en su raíz auxiliar. Mediante el análisis potencial de Sleator-Tarjan, cualquier secuencia válida de operaciones sobre el Link-Cut Forest (`link`, `cut`, `connected`, `path_sum`, `make_root`) posee costo amortizado $O(\log n)$.
 * **Validación Diferencial Rigurosa:** Contrastación de **15,000 operaciones aleatorias** sobre grafos dinámicos frente a un oráculo canónico BFS (`ReferenceForest`), reportando **0 discrepancias** y garantizando la preservación estricta de **9 invariantes estructurales** en cada paso.
+
+### 3. Teoría de Números, Aritmética Modular y Teorema Chino del Resto (Lab 06)
+* **Algoritmo de Euclides Extendido e Identidad de Bézout:** Determina $d = \gcd(a, b)$ y los coeficientes enteros $x, y$ tales que $ax + by = d$. Si $d = 1$, $x$ representa el inverso multiplicativo modular $a^{-1} \pmod b$.
+* **Cota de Lamé y Complejidad Logarítmica:** El número de divisiones del algoritmo de Euclides está acotado superiormente por $k \le 5\log_{10}(\min(a,b)) + 1$, alcanzándose el peor caso estrictamente en pares consecutivos de Fibonacci ($F_{k+1}, F_k$), donde todos los cocientes son $q_i = 1$.
+* **Exponenciación Binaria Modular (*Square-and-Multiply*):** Reduce el cálculo de $a^b \pmod m$ de $b-1$ multiplicaciones a lo sumo $2\lfloor\log_2 b\rfloor$ multiplicaciones, manteniendo los operandos acotados mediante reducción modular en cada paso y permitiendo cómputos con exponentes de 1024 bits en microsegundos.
+* **Teorema Chino del Resto (TCR) Analítico:** Resuelve sistemas de congruencias $x \equiv a_i \pmod{m_i}$ con módulos coprimos dos a dos mediante la construcción de bases ortogonales $e_i = M_i \cdot (M_i^{-1} \pmod{m_i})$, garantizando una solución única módulo $M = \prod m_i$.
 
