@@ -1,0 +1,3 @@
+operacion,entrada,error_esperado,error_obtenido,estado
+LINK,"(4,6), nodos ya conectados",ciclo,LINK produciría un ciclo,OK
+CUT,"(4,6), no es arista directa",arista inexistente/no directa,CUT solo puede eliminar una arista existente y directa,OK

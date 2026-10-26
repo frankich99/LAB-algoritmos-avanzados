@@ -1,0 +1,4 @@
+n,semilla,operaciones_totales,link,cut,connected,path_sum,make_root,discrepancias,validaciones,rotaciones,splays,exposes,inversiones_perezosas,estado
+30,2026,5000,1076,1048,1219,1233,424,0,5001,40702,46475,13522,8174,OK
+60,2026,5000,1098,1041,1196,1251,414,0,5001,46393,47961,13600,8429,OK
+120,2026,5000,1146,1039,1157,1248,410,0,5001,50012,48905,13616,8479,OK
