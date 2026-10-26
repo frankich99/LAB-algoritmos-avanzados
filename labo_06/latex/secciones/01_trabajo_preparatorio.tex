@@ -1,0 +1,29 @@
+% !TEX root = ../main.tex
+\section{Trabajo preparatorio y fundamentos}
+
+\subsection{División euclidiana y algoritmo de Euclides}
+Para todo par de enteros $a, b \in \mathbb{Z}$ con $b \neq 0$, existen únicos enteros $q$ (cociente) y $r$ (residuo) tales que $a = b \cdot q + r$, con $0 \le r < |b|$. Si $a = bq + r$, el lema fundamental establece que el conjunto de divisores comunes de $a$ y $b$ es idéntico al de $b$ y $r$, de modo que $\gcd(a, b) = \gcd(b, a \bmod b)$. El algoritmo de Euclides reemplaza iterativamente $(a, b) \leftarrow (b, a \bmod b)$ hasta alcanzar $b = 0$; el último residuo no nulo es el máximo común divisor. Como los residuos satisfacen $r_0 > r_1 > r_2 > \dots \ge 0$, el principio del buen orden garantiza la terminación en un número finito de pasos.
+
+En cuanto a su complejidad, el peor caso ocurre cuando las entradas son términos consecutivos de Fibonacci $F_{k+2}$ y $F_{k+1}$, donde todos los cocientes son 1; según el \textbf{Teorema de Lamé (1844)}, el número máximo de divisiones está acotado por $k_{\text{máx}} \le 1.44 \log_2 b$. En promedio, de acuerdo con el \textbf{Teorema de Dixon y Heilbronn (1970)}, el número esperado de divisiones para entradas de $k$ bits converge asintóticamente a $E[k] = \frac{12 \ln 2}{\pi^2} \ln b \approx 0.584 \cdot k$.
+
+\subsection{Identidad de Bézout e inverso modular}
+Para enteros $a, b$ no simultáneamente nulos, existen coeficientes enteros $x, y \in \mathbb{Z}$ tales que $a \cdot x + b \cdot y = \gcd(a, b)$. La forma extendida de Euclides calcula simultáneamente $d = \gcd(a, b)$ y el par $(x, y)$ manteniendo en cada paso la invariante $r_i = a s_i + b t_i$. Los coeficientes de Bézout no son únicos: dada una solución particular $(x_0, y_0)$, cualquier par de la forma $(x_0 + k \frac{b}{d}, y_0 - k \frac{a}{d})$ con $k \in \mathbb{Z}$ es también solución entera.
+
+Cuando $b = n$ y $\gcd(a, n) = 1$, la identidad se reduce a $ax + ny = 1$, deduciéndose que $ax \equiv 1 \pmod n$. Por tanto, el inverso multiplicativo de $a$ en $\mathbb{Z}_n$ existe si y solo si $\gcd(a, n) = 1$, y se obtiene directamente como $u = x \bmod n \in \{1, \dots, n-1\}$. Si $\gcd(a, n) > 1$, el producto $a \cdot u$ es múltiplo de $\gcd(a, n)$ y nunca puede ser congruente con $1$ módulo $n$.
+
+\subsection{Congruencias lineales modulares}
+Una congruencia lineal $ax \equiv b \pmod n$ equivale a la ecuación diofántica $ax - ny = b$. Dado que cualquier combinación lineal de $a$ y $n$ es divisible por $d = \gcd(a, n)$, la congruencia admite solución si y solo si $d$ divide a $b$ ($d \mid b$). Cuando esta condición se satisface, existen exactamente $d$ soluciones incongruentes entre sí en $\mathbb{Z}_n$, distribuidas en progresión aritmética:
+\begin{equation}
+    x_k = \left(x_0 + k \cdot \frac{n}{d}\right) \bmod n, \quad \text{para } k = 0, 1, \dots, d-1,
+\end{equation}
+donde $x_0 = (x' \cdot (b/d)) \bmod (n/d)$, siendo $x'$ el inverso modular de $(a/d)$ módulo $(n/d)$.
+
+\subsection{Exponenciación modular binaria rápida}
+El cálculo ingenuo de $a^e \bmod n$ mediante $e - 1$ multiplicaciones directas requiere tiempo $\Theta(e)$ y genera un entero intermedio inmanejable de orden $e \log_2 a$ bits. El método binario de cuadrados sucesivos descompone el exponente en base 2: $e = \sum_{j=0}^{k-1} b_j 2^j$ ($b_j \in \{0, 1\}$). En cada paso, eleva al cuadrado la base acumulada ($B \leftarrow B^2 \bmod n$) y, si el bit actual es 1, multiplica el acumulador ($R \leftarrow R \cdot B \bmod n$). El total de operaciones modulares se reduce a $k - 1$ cuadrados más tantos productos como bits en 1 tenga $e$ (peso de Hamming $W(e)$), acotando el costo a $\le 2k - 1$ multiplicaciones y manteniendo todos los operandos intermedios menores que $n^2$.
+
+\subsection{Teorema Chino del Resto (TCR)}
+Dados $m$ módulos $n_1, n_2, \dots, n_m > 1$ coprimos dos a dos ($\gcd(n_i, n_j) = 1$ para $i \neq j$) y una colección de residuos enteros $a_1, \dots, a_m$, el sistema $x \equiv a_i \pmod{n_i}$ posee una solución única en el rango canónico $0 \le x < N$, donde $N = \prod_{i=1}^m n_i$. La solución analítica directa se construye mediante:
+\begin{equation}
+    N_i = \frac{N}{n_i}, \qquad M_i = N_i^{-1} \pmod{n_i}, \qquad x = \left(\sum_{i=1}^m a_i \cdot N_i \cdot M_i\right) \bmod N.
+\end{equation}
+La coprimalidad dos a dos es indispensable para asegurar que $\gcd(N_i, n_i) = 1$, garantizando la existencia matemática de cada inverso $M_i$.
