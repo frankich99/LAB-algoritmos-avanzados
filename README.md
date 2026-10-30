@@ -50,6 +50,7 @@ Cada laboratorio incluye:
 | **Lab 04** | Montículos de Fibonacci y Análisis Amortizado | Montículo de Fibonacci con punteros circulares, consolidación por grados, cortes en cascada, `heapq` perezoso y Dijkstra | Potencial: $\Phi(H) = t(H) + 2m(H)$<br>`insert`: $O(1)$, `decrease-key`: $O(1)$, `extract-min`: $O(\log n)$<br>Dijkstra: $O(|E| + |V|\log |V|)$ |
 | **Lab 05** | Splay Trees y Árboles Dinámicos Link-Cut | Splay Tree autoajustable, partición en caminos preferidos, Link-Cut Forest con punteros virtuales (*path-parent*), reversión perezosa, sumas de camino | Potencial Sleator-Tarjan: $O(\log n)$ amortizado por operación<br>9 invariantes estructurales validadas al 100%<br>15,000 operaciones diferenciales con 0 discrepancias frente a BFS |
 | **Lab 06** | Algoritmos de Teoría de Números y Aritmética Modular | MCD Euclides clásico y extendido ($ax+by=d$), Inversos modulares, Congruencias lineales, Exponenciación binaria modular ($O(\log b)$) y Teorema Chino del Resto (TCR) analítico con traza | Teorema de Lamé: $k \le 5\log_{10}(\min(a,b)) + 1$<br>Bezout: $ax \equiv d \pmod m$<br>Potencia rápida: $\le 2\lfloor\log_2 b\rfloor$ mults vs $b-1$<br>TCR: solución única $\pmod M$ con $\gcd(m_i, m_j)=1$ |
+| **[Lab 07](lab_07/)** | Primalidad y algoritmos probabilísticos | División de prueba, Fermat, Miller–Rabin, generación y experimentos | Error de Miller–Rabin $\le 4^{-r}$ para compuestos impares con bases uniformes independientes; 210 probables primos y 928 comparaciones auditadas |
 
 ---
 
@@ -196,6 +197,12 @@ UNSAAC-algoritmos-avanzados/
 │       ├── figuras/                            # Gráficos empíricos y escudo institucional
 │       └── secciones/                          # Secciones modulares del informe (00 a 06)
 │
+├── lab_07/                                     # Laboratorio 07 en la raíz, NO dentro de LABORATORIOS/
+│   ├── README.md / Guia 07.pdf                 # Guía de ejecución y enunciado
+│   ├── colab/grupo 5 guia 07.ipynb             # Único cuaderno: código, tablas y figuras inline
+│   ├── python/                                 # Biblioteca, 32 pruebas, experimentos, CSV y PNG
+│   └── latex/main.tex / latex/main.pdf         # Fuentes e informe compilado
+│
 ├── .gitignore                                  # Exclusión de temporales y compilados
 ├── requirements.txt                            # Dependencias necesarias
 └── README.md                                   # Documentación principal del repositorio
@@ -207,8 +214,8 @@ UNSAAC-algoritmos-avanzados/
 
 1. **Clonar el repositorio:**
    ```bash
-   git clone https://github.com/frankich99/UNSAAC-algoritmos-avanzados.git
-   cd UNSAAC-algoritmos-avanzados
+   git clone https://github.com/frankich99/LAB-algoritmos-avanzados.git
+   cd LAB-algoritmos-avanzados
    ```
 
 2. **Requisitos de Python:**
@@ -289,6 +296,18 @@ python ejercicios_resueltos.py
 * **Cuaderno interactivo oficial:** Abrir `labo_06/colab/grupo 5 guia 06.ipynb` en Google Colab o JupyterLab (autónomo, con suite de 34 pruebas y gráficos inline).
 * **Compilar informe PDF:** Doble clic en `labo_06/compilar_informe.bat` o `labo_06/modo_en_vivo.bat`.
 
+### Laboratorio 07: Primalidad y algoritmos probabilísticos
+La entrega está en **[`lab_07/`](lab_07/README.md)**, directamente en la raíz del repositorio. Consulte el [cuaderno con salidas](lab_07/colab/grupo%205%20guia%2007.ipynb) o el [informe PDF](lab_07/latex/main.pdf). El cuaderno funciona en Colab y Jupyter con Python 3.11+; ejecute sus celdas en orden, sin dependencias locales ni generadores auxiliares. **No ejecute `python/build_notebook.py`**: es un generador anterior que sobrescribe el cuaderno inline.
+
+```bash
+cd lab_07
+python python/test_primality.py
+python python/verify_results.py
+python latex/compilar.py
+```
+
+Las ramas `lab07/franki-biblioteca`, `lab07/yeni-pruebas`, `lab07/romario-experimentos` y `lab07/aldo-informe-colab` organizan áreas de revisión. Son ramas preparadas para los integrantes, **no evidencia de autoría personal**; cada integrante deberá registrar allí sus propios cambios y commits.
+
 ---
 
 ## 🔬 Aspectos Teóricos Clave Evaluados en Lab 04, Lab 05 y Lab 06
@@ -310,4 +329,3 @@ python ejercicios_resueltos.py
 * **Cota de Lamé y Complejidad Logarítmica:** El número de divisiones del algoritmo de Euclides está acotado superiormente por $k \le 5\log_{10}(\min(a,b)) + 1$, alcanzándose el peor caso estrictamente en pares consecutivos de Fibonacci ($F_{k+1}, F_k$), donde todos los cocientes son $q_i = 1$.
 * **Exponenciación Binaria Modular (*Square-and-Multiply*):** Reduce el cálculo de $a^b \pmod m$ de $b-1$ multiplicaciones a lo sumo $2\lfloor\log_2 b\rfloor$ multiplicaciones, manteniendo los operandos acotados mediante reducción modular en cada paso y permitiendo cómputos con exponentes de 1024 bits en microsegundos.
 * **Teorema Chino del Resto (TCR) Analítico:** Resuelve sistemas de congruencias $x \equiv a_i \pmod{m_i}$ con módulos coprimos dos a dos mediante la construcción de bases ortogonales $e_i = M_i \cdot (M_i^{-1} \pmod{m_i})$, garantizando una solución única módulo $M = \prod m_i$.
-

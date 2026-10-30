@@ -1,0 +1,9 @@
+% !TEX root = ../main.tex
+\section{Conclusiones grupales}
+La biblioteca separa tres afirmaciones: un divisor o una base testigo certifican composición; la división de prueba sin divisor certifica primalidad; superar rondas de Miller--Rabin solo indica probable primo. $341$, $561$, $1105$ y $1729$ pasan Fermat con base $2$, pero Miller--Rabin los rechaza con esa misma base. En $341$, la traza $[32,1]$ revela una raíz no trivial de $1$ y permite recuperar los factores $31$ y $11$.
+
+Las 32 pruebas contrastan $10\,001$ enteros con una criba independiente, $1000$ valores aleatorios menores que $10^6$ con división de prueba y bases pequeñas clasificadas exhaustivamente. Se generaron $210$ probables primos entre $16$ y $1024$ bits; los de $16$ y $32$ bits se verificaron además por división. A $1024$ bits se probaron $12\,870$ candidatos para obtener $30$ aceptados: media de $429$ frente a $354.9$ de la aproximación teórica. La diferencia puede deberse a la variación muestral.
+
+El rendimiento depende del tamaño y del trabajo realizado. En la comparación local, a $1024$ bits la mediana de Miller--Rabin pasó de $10\,763.3\,\mu\mathrm{s}$ con una ronda a $228\,012.8\,\mu\mathrm{s}$ con veinte; un testigo puede detener antes las rondas de un compuesto. El precribado descartó $10\,833$ candidatos de ese tamaño, evitando pruebas modulares sin alterar la densidad de primos del muestreo.
+
+Por último, cero aceptaciones observadas no significa riesgo nulo: para $25$, la frecuencia con cinco rondas fue $0/3000$, pero la probabilidad exacta calculada es $6.21\times10^{-6}$. La cota $4^{-r}$ presupone bases uniformes independientes; una semilla fija permite reproducir el laboratorio, no generar claves seguras. En conjunto, trazas, conteos y tiempos respaldan decisiones distintas: corrección, incertidumbre y costo deben comunicarse por separado.

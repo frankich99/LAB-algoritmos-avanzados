@@ -1,27 +1,30 @@
 % !TEX root = ../main.tex
 \section{Respuestas a las preguntas de análisis}
+% La guía solicita responder cada pregunta; se conserva el formato de consulta breve.
 \begin{enumerate}
+\setlength{\itemsep}{.2em}
 \item \textbf{¿Por qué basta probar divisores hasta $\sqrt n$?} Si $n=ab$ y $a>\sqrt n$, $b>\sqrt n$, entonces $ab>n$, contradicción. Todo compuesto tiene al menos un divisor $\le\sqrt n$.
 
-\item \textbf{¿Por qué esa cota es exponencial en bits?} Para $L$ bits, $n$ es del orden de $2^L$ y $\sqrt n$ del orden de $2^{L/2}$. Una función exponencial de $L$ no es polinómica aunque sea sublineal en $n$.
+\item \textbf{¿Por qué esa cota es exponencial en bits?} Si $n$ tiene $L$ bits, $\sqrt n$ es del orden de $2^{L/2}$: exponencial en $L$, aunque sublineal en $n$.
 
 \item \textbf{¿Por qué Fermat puede demostrar composición, pero no primalidad?} Para un primo $p$ y base coprima $a$, Fermat exige $a^{p-1}\equiv1\pmod p$. Si falla, por contraposición $n$ es compuesto; si pasa, puede ser un pseudoprimo. El ejemplo $341$ con base $2$ confirma que el recíproco es falso.
 
-\item \textbf{¿Qué diferencia hay entre pseudoprimo y número de Carmichael?} Un pseudoprimo compuesto pasa Fermat para una base específica coprima; Carmichael pasa para \emph{todas} las bases coprimas. $341$ pasa base $2$, mientras $561$ pasa cualquier base coprima. La base $3$ no es coprima a $561$ y sí lo detecta.
+\item \textbf{¿Qué diferencia hay entre pseudoprimo y número de Carmichael?} Un pseudoprimo pasa Fermat para alguna base coprima; un Carmichael, para todas. $341$ pasa base $2$; $561$ pasa cualquier base coprima, pero la base $3$ revela un factor.
 
 \item \textbf{¿Por qué Miller--Rabin examina $n-1=2^sd$?} Separar la máxima potencia de $2$ produce la cadena $a^d,a^{2d},\ldots,a^{2^{s-1}d}$. En un módulo primo, si el último término es $1$, la cadena debe comenzar en $1$ o alcanzar $-1$ antes: solo $\pm1$ son raíces de $x^2=1$ en un cuerpo.
 
-\item \textbf{¿Qué significa encontrar una raíz no trivial de $1$?} Existe $x\not\equiv\pm1\pmod n$ con $x^2\equiv1\pmod n$. Como $(x-1)(x+1)\equiv0\pmod n$ sin que uno de esos factores sea $0\pmod n$, $n$ es compuesto. En $341$, $x=32$ y los MCD respectivos recuperan $31$ y $11$.
+\item \textbf{¿Qué significa encontrar una raíz no trivial de $1$?} Si $x\not\equiv\pm1\pmod n$ y $x^2\equiv1\pmod n$, entonces $n$ es compuesto. Para $341$, $x=32$ y $\gcd(x\pm1,341)$ recupera $31$ y $11$.
 
-\item \textbf{¿Qué diferencia hay entre testigo y mentiroso fuerte?} Testigo: base cuyo resultado Miller--Rabin es negativo, prueba que el número es compuesto. Mentiroso fuerte: base cuyo resultado es positivo pese a que $n$ es compuesto. El par $(341,2)$ es testigo, aunque $2$ sea mentiroso para Fermat en $341$.
+\pagebreak[4]
+\item \textbf{¿Qué diferencia hay entre testigo y mentiroso fuerte?} El testigo rechaza un compuesto; el mentiroso fuerte lo acepta. Para $341$, la base $2$ pasa Fermat, pero es testigo de Miller--Rabin.
 
 \item \textbf{¿Por qué el error es unilateral?} Toda base válida hace pasar a un número primo. El rechazo significa compuesto con certeza; la única posible equivocación es aceptar como probable primo un compuesto que superó las bases elegidas.
 
 \item \textbf{¿Qué hipótesis permite usar $4^{-r}$?} El número evaluado debe ser compuesto impar; cada base se selecciona uniforme e independientemente entre las bases válidas. La fracción de mentirosos fuertes es $\le1/4$ y el evento de $r$ aceptaciones tiene probabilidad $\le(1/4)^r$. La semilla fija permite reproducir un experimento, no garantiza aleatoriedad criptográfica.
 
-\item \textbf{¿Por qué una semilla fija no es apropiada para generar claves?} Permite repetir la misma secuencia de candidatos y bases. Si se conoce o adivina, un adversario reconstruye los valores generados. Se debe usar una fuente segura e impredecible como \texttt{secrets.SystemRandom}.
+\item \textbf{¿Por qué una semilla fija no es apropiada para generar claves?} Permite reconstruir candidatos y bases si se conoce o adivina; se requiere una fuente impredecible como \texttt{secrets.SystemRandom}.
 
-\item \textbf{¿Cómo influye el precribado?} Detecta compuestos divisibles por primos pequeños con divisiones baratas, evitando muchas exponenciaciones. También debe aceptar cuando el candidato coincide exactamente con uno de esos primos. Acelera la generación, pero no certifica primalidad de números grandes que lo superan.
+\item \textbf{¿Cómo influye el precribado?} Descarta múltiplos de primos pequeños y certifica si el candidato coincide con uno de ellos. Ahorra exponenciaciones, sin certificar números grandes que lo superan.
 
 \item \textbf{¿Por qué ``no observamos errores'' no significa ``el algoritmo no puede errar''?} Una muestra finita puede omitir las bases mentirosas. La ausencia observada no prueba probabilidad cero; hay que distinguir frecuencia empírica, probabilidad exacta $p_n^r$ para un compuesto dado y cota universal $4^{-r}$.
 \end{enumerate}

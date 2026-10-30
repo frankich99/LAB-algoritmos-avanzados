@@ -22,8 +22,8 @@ lab_07/
 │   ├── verify_results.py           auditoría automática de los CSV y PNG
 │   ├── render_resueltos.py         código y salidas reales para el informe
 │   ├── render_propuesto1.py        tablas de casos y trazas desde los CSV
-│   ├── build_notebook.py           construye el cuaderno desde las fuentes
-│   ├── results/                   10 CSV y respaldo de la antigua salida de Colab
+│   ├── build_notebook.py           generador antiguo (NO usar para el cuaderno inline)
+│   ├── results/                   10 CSV auditables; respaldos locales opcionales
 │   └── figures/                   4 gráficos PNG
 ├── latex/
 │   ├── main.tex / main.pdf          informe modular y PDF compilado
@@ -38,7 +38,7 @@ lab_07/
 
 ## Ejecución local
 
-Python **3.11+**; `matplotlib` para gráficos; `pdflatex` para el informe. `pandas` solo para mostrar tablas en Colab. Desde `lab_07`:
+Python **3.11+**; `matplotlib` para los gráficos locales y `pdflatex` para el informe. El Colab solo utiliza la biblioteca estándar y la visualización propia del cuaderno. Desde `lab_07`:
 
 ```powershell
 python python/ejercicios_resueltos.py
@@ -48,15 +48,9 @@ python python/verify_results.py
 python latex/compilar.py
 ```
 
-Para reconstruir el cuaderno desde el código fuente e incrustar las salidas de una ejecución limpia:
+Para usar el cuaderno, abra **solo** `colab/grupo 5 guia 07.ipynb` en Colab o Jupyter con Python 3.11+ y ejecute todas las celdas en orden. Cada cálculo, tabla y gráfico se muestra bajo su celda, sin `%%writefile`, instalación de paquetes ni archivos auxiliares. La última celda ofrece opcionalmente un ZIP de evidencias generado en memoria. **No ejecute `python/build_notebook.py`: es un generador antiguo que sobrescribiría este cuaderno inline con otra organización.**
 
-```powershell
-python python/build_notebook.py --execute
-```
-
-Para usar el cuaderno, abra **solo** `colab/grupo 5 guia 07.ipynb` en Colab o Jupyter con Python 3.11+ y ejecute todas las celdas en orden. La primera celda instala `matplotlib` y `pandas` si no están disponibles y cambia a un directorio temporal: ni los módulos ni los resultados se escriben en `colab/`. Cada tabla y figura aparece junto a la celda que la genera; al final, Colab inicia la descarga del ZIP y Jupyter muestra un enlace de descarga en la propia celda, sin buscar rutas temporales. Para construir el cuaderno desde las fuentes, `python/build_notebook.py` requiere `nbformat`, y `--execute` también `nbclient` y un kernel `python3`.
-
-Los archivos de la ejecución anterior que estaban junto al cuaderno se conservaron íntegros en `python/results/colab_resultados_anteriores.zip`; no son necesarios para ejecutar el `.ipynb`.
+Los posibles respaldos de ejecuciones anteriores permanecen solo en la instalación local; no son parte de la entrega ni necesarios para ejecutar el `.ipynb`.
 
 El generador experimental local sobrescribe únicamente los CSV, PNG y fragmentos de tablas autogenerados de este laboratorio. La compilación del informe ejecuta `render_resueltos.py` y `render_propuesto1.py` para insertar código, resultados, casos y trazas actuales. Tras cambiar experimentos, copie los PNG a `latex/figuras/` antes de compilar:
 
@@ -91,6 +85,6 @@ La siguiente división propone cuatro áreas de responsabilidad de tamaño compa
 | `lab07/franki-biblioteca` | Noe Franklin Choquenaira Quispe | División de prueba, Fermat, Miller--Rabin, precribado | `python/primality.py` |
 | `lab07/yeni-pruebas` | Yeni Ruth Porroa Sivana | Casos reproducibles, ejercicios resueltos y pruebas | `python/case_generator.py`, `python/ejercicios_resueltos.py`, `python/test_primality.py` |
 | `lab07/romario-experimentos` | Romario Quispe Rimachi | Mediciones, datos CSV, figuras y auditoría | `python/experiments.py`, `python/verify_results.py`, `python/results/`, `python/figures/` |
-| `lab07/aldo-informe-colab` | Aldo Yaranga Achahui | Informe, cuaderno integral y compilación | `latex/`, `colab/`, `python/build_notebook.py`, `python/render_*.py` |
+| `lab07/aldo-informe-colab` | Aldo Yaranga Achahui | Informe, cuaderno integral y compilación | `latex/`, `colab/`, `python/render_*.py` (no ejecutar el generador antiguo) |
 
 La rama `main` debe contener la integración verificada. Las ramas existentes de laboratorios anteriores se conservan sin sobrescribirlas. Los tiempos dependen del equipo; las bases, semillas y contadores reproducibles permiten revisar los resultados de cada área.
