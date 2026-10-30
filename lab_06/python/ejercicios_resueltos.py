@@ -4,6 +4,10 @@ ejercicios_resueltos.py
 
 Ejercicios resueltos 1, 2 y 3 de la Guía 06, tal como se ejecutan en el cuaderno de Colab.
 """
+import sys
+
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
 
 
 # --- Ejercicio resuelto 1: Euclides con traza y coeficientes de Bézout ---
