@@ -1,0 +1,44 @@
+% !TEX root = ../main.tex
+\section{Ejercicio propuesto 2: comparación experimental}
+
+\subsection{Diseño y metodología de medición}
+Se estudiaron siete tamaños ($16$--$1024$ bits) y se generaron $30$ probables primos por tamaño. Para la comparación se prepararon $8$ candidatos aceptados y $8$ compuestos impares por tamaño. Solo los aceptados de $16$ y $32$ bits se verificaron también por división de prueba. Las semillas de generación, comparación y simulación fueron \texttt{20260701}, \texttt{20260702} y \texttt{20260703}.
+
+Las mismas entradas y $20$ bases preseleccionadas alimentaron Fermat y Miller--Rabin con $1$, $5$, $10$ y $20$ rondas; la división se midió solo hasta $32$ bits. Se hicieron siete repeticiones por caso con \texttt{perf\_counter\_ns()}, sin selección de bases, impresión ni escritura durante el cronometraje. Se registraron tiempos y operaciones. El precribado se desactivó \emph{solo} para comparar pruebas; en generación permaneció activo.
+
+\subsection{Comparación de tiempo y operaciones}
+Las medianas sobre candidatos aceptados (Tabla \ref{tab:tiempos}) y la dispersión de siete mediciones de un caso (Tabla \ref{tab:dispersion}) no son la misma estadística. Los registros y bases constan en \path{python/results/comparacion_metodos.csv} y \path{python/results/entradas_y_bases.csv}.
+\input{secciones/04_tab_tiempos.tex}
+\input{secciones/04_tab_dispersion.tex}
+\input{secciones/04_analisis_costo.tex}
+
+\begin{figure}[H]\centering
+\includegraphics[width=.88\textwidth]{fig1_tiempo_vs_bits.png}
+\caption{Tiempo mediano por prueba y longitud binaria; escala temporal logarítmica. La división se ejecuta solo hasta $32$ bits.}\label{fig:tiempo}
+\end{figure}
+\begin{figure}[H]\centering
+\includegraphics[width=.88\textwidth]{fig2_cuadrados_vs_bits.png}
+\caption{Cuadrados modulares efectivamente realizados por Miller--Rabin con $1$, $5$, $10$ y $20$ rondas.}\label{fig:cuadrados}
+\end{figure}
+Un testigo detiene las rondas de un compuesto; en un candidato aceptado se completan. El costo por prueba no equivale al costo de buscar un probable primo.
+
+\subsection{Generación y precribado}
+La Tabla \ref{tab:generacion} presenta candidatos, descartes y tiempo; los $210$ registros individuales están en \path{python/results/generacion_210_probables_primos.csv}.
+\input{secciones/04_tab_generacion.tex}
+\input{secciones/04_analisis_generacion.tex}
+\begin{figure}[H]\centering
+\includegraphics[width=.88\textwidth]{fig3_candidatos_vs_bits.png}
+\caption{Candidatos impares por probable primo: media de $30$ muestras y aproximación $L\ln(2)/2$.}\label{fig:candidatos}
+\end{figure}
+El precribado reduce trabajo, no altera la densidad prima de los candidatos originales.
+
+\subsection{Testigos, mentirosos fuertes y probabilidad de error}
+La Tabla \ref{tab:mentirosos} cuenta testigos y mentirosos fuertes; \path{python/results/clasificacion_bases.csv} identifica cada base pequeña. Para un compuesto fijo con fracción $p_n$ de mentirosos, $p_n^r$ es la probabilidad de aceptar $r$ bases uniformes independientes; $4^{-r}$ es solo su cota superior.
+
+La simulación usa bases clasificadas de $25$, $91$, $121$, $341$ y $561$; no mide tiempo. Cero falsos positivos en una muestra finita no demuestra error imposible. Fermat carece de una cota análoga ante números de Carmichael.
+\input{secciones/04_tab_mentirosos.tex}
+\input{secciones/04_tab_error.tex}
+\begin{figure}[H]\centering
+\includegraphics[width=.88\textwidth]{fig4_error_empirico.png}
+\caption{Compuesto $25$: tasa exacta $p_n^r$, cota $4^{-r}$ y $3000$ ensayos por número de rondas. Los ceros observados se anotan como $0/3000$, no como probabilidades positivas.}\label{fig:error}
+\end{figure}

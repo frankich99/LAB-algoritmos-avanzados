@@ -1,0 +1,17 @@
+% !TEX root = ../main.tex
+\section{Trabajo preparatorio y fundamentos algebraicos}
+
+\subsection{Unidades módulo \texorpdfstring{$n$}{n}, función \texorpdfstring{$\varphi$}{phi} y orden}
+Las unidades $\mathbb{Z}_n^{*}=\{a\bmod n:\gcd(a,n)=1\}$ forman un grupo de orden $\varphi(n)$. El orden de $a$ divide $\varphi(n)$ por Lagrange; Euler da $a^{\varphi(n)}\equiv1\pmod n$. Para un primo $p$, $\varphi(p)=p-1$ y se obtiene Fermat \cite{shoup,cormen}. Si la congruencia falla, $n$ es compuesto; si se cumple, no necesariamente es primo.
+
+\subsection{División de prueba, pseudoprimos y Carmichael}
+Si $n=ab$ es compuesto, al menos un factor es $\le\sqrt n$; la división de prueba termina en $\lfloor\sqrt n\rfloor$. Para $L$ bits requiere del orden de $2^{L/2}$ divisiones. En cambio, $341=11\cdot31$ cumple la congruencia de Fermat en base $2$: es pseudoprimo para esa base. Los números de Carmichael $561$, $1105$ y $1729$ la cumplen para \emph{toda} base coprima. Según Korselt, son compuestos libres de cuadrados y $(p-1)\mid(n-1)$ para cada primo $p\mid n$ \cite{crandall}.
+
+\subsection{Exponenciación binaria y Miller--Rabin}
+La exponenciación binaria calcula $a^e\bmod n$ en $O(\log e)$ productos modulares. Para $n>2$ impar, Miller--Rabin escribe $n-1=2^sd$ ($d$ impar) y examina $a^d,a^{2d},\ldots,a^{2^{s-1}d}$ módulo $n$. Acepta si aparece $1$ al inicio o $-1$ en la cadena. Alcanzar $1$ desde una raíz distinta de $\pm1$ demuestra composición y puede revelar factores mediante $\gcd(x\pm1,n)$. Una base que rechaza es \emph{testigo}; una que acepta un compuesto, \emph{mentiroso fuerte}. Los cuadrados contabilizados son los ejecutados en la exponenciación inicial y la cadena.
+
+\subsection{Probabilidad de error y tipo de algoritmo}
+Para un compuesto impar, a lo sumo un cuarto de las bases válidas son mentirosos fuertes. Con $r$ bases uniformes independientes, la aceptación errónea tiene probabilidad $\le4^{-r}$. Miller--Rabin es Monte Carlo de error unilateral: un rechazo es concluyente, una aceptación no. A diferencia de él, un algoritmo Las Vegas siempre responde correctamente, aunque su duración pueda variar. Las semillas fijas reproducen ensayos; la generación criptográfica requiere entropía impredecible y \texttt{secrets.SystemRandom} \cite{pythonsecrets}.
+
+\subsection{Modelo de costos y expectativa de candidatos}
+Por ronda, Fermat y Miller--Rabin realizan $O(L)$ productos modulares; $r$ rondas cuestan $O(rL)$ productos, frente a $O(2^{L/2})$ divisiones de prueba. Con multiplicación escolar, una ronda requiere $O(L^3)$ operaciones de bit. Entre impares de $L$ bits, la densidad prima aproximada $2/(L\ln2)$ predice $L\ln2/2$ candidatos por primo. El precribado ahorra exponenciaciones, no cambia esa densidad inicial.

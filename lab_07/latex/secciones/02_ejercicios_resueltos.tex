@@ -1,0 +1,21 @@
+% !TEX root = ../main.tex
+\section{Ejercicios resueltos}
+Los tres ejercicios se ejecutan y verifican con aserciones en \path{python/ejercicios_resueltos.py}; las salidas siguientes se generan desde ese código.
+
+\subsection{Resuelto 1: división de prueba y Fermat}
+La división llega hasta \texttt{isqrt(n)}; Fermat comprueba primero $\gcd(a,n)$ y después $a^{n-1}\bmod n$. Código y salida:
+\input{secciones/02_resuelto_1_generado.tex}
+$341=11\cdot31$ pasa Fermat base $2$ pese a ser compuesto. Para $561$, la base $3$ revela un factor común; la base $2$ pasa Fermat.
+
+\subsection{Resuelto 2: Miller--Rabin con traza verificable}
+Para $221-1=220=2^2\cdot55$, la base $2$ produce:
+\begin{equation}
+2^{55}\bmod221=128,\qquad128^2\bmod221=30\neq220.
+\end{equation}
+No aparece $-1\equiv220$: $221$ es compuesto. La salida incluye parámetros, residuos, motivo y operaciones:
+\input{secciones/02_resuelto_2_generado.tex}
+Las trazas de $341$ y $561$ se presentan junto con $221$ en la Tabla \ref{tab:trazas_propuesto1}; el registro completo está en \path{python/results/trazas_miller_rabin.csv}.
+
+\subsection{Resuelto 3: prueba repetida y candidatos}
+\input{secciones/02_resuelto_3_generado.tex}
+Los bits extremos fijados a $1$ garantizan longitud e imparidad. Se prueba $1009$, mayor que el límite del precribado, para ejecutar las cinco rondas: se informa ``probable primo'' y la cota condicional $4^{-5}=1/1024$. La semilla fija reproduce el ejemplo, pero no es apta para claves.
