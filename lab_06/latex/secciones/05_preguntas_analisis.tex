@@ -1,0 +1,88 @@
+% !TEX root = ../main.tex
+\section{Respuestas a las preguntas de análisis}
+
+A continuación se presentan las respuestas concretas a las doce preguntas de la guía, organizadas de forma concisa y respaldadas con los valores obtenidos:
+
+\smallskip
+\noindent\textbf{1. ¿Por qué la sucesión de residuos de Euclides necesariamente termina en cero?}
+\begin{itemize}\setlength\itemsep{0pt}\setlength\parskip{0pt}
+    \item \textbf{Fundamento:} Cada residuo cumple $0 \le r_{i+1} < r_i$. Al ser una sucesión estrictamente decreciente de enteros no negativos, el principio del buen orden asegura que alcance el cero en pasos finitos. Además, $r_{i+2} < r_i / 2$, garantizando a lo sumo $2 \log_2 b$ divisiones.
+    \item \textbf{Evidencia:} En $(252, 105)$ terminó en 3 divisiones ($42 \to 21 \to 0$). Para 512 bits, el peor caso tomó 344 divisiones, muy inferior al límite de Lamé (739).
+\end{itemize}
+
+\smallskip
+\noindent\textbf{2. ¿Qué información adicional conserva Euclides extendido?}
+\begin{itemize}\setlength\itemsep{0pt}\setlength\parskip{0pt}
+    \item \textbf{Fundamento:} Mantiene los coeficientes enteros $x, y$ de combinación lineal que satisfacen la identidad de Bézout: $ax + by = d$.
+    \item \textbf{Evidencia:} Para $(252, 105)$, devuelve $d = 21$ y el certificado $(x = -2, y = 5)$ con $252(-2) + 105(5) = 21$. Cuando $\gcd(a, n) = 1$, el coeficiente $x \bmod n$ entrega directamente el inverso modular.
+\end{itemize}
+
+\smallskip
+\noindent\textbf{3. ¿Por qué los coeficientes de Bézout no son únicos?}
+\begin{itemize}\setlength\itemsep{0pt}\setlength\parskip{0pt}
+    \item \textbf{Fundamento:} La ecuación diofántica $ax + by = d$ tiene infinitas soluciones enteras de la forma $(x_0 + k \frac{b}{d}, y_0 - k \frac{a}{d})$ con $k \in \mathbb{Z}$, ya que $a(kb/d) - b(ka/d) = 0$.
+    \item \textbf{Evidencia:} Para $252$ y $105$ ($d = 21$), la biblioteca halló $(-2, 5)$. Para $k = 1$ ($b/d = 5, a/d = 12$), el par $(3, -7)$ también cumple: $252(3) + 105(-7) = 756 - 735 = 21$.
+\end{itemize}
+
+\smallskip
+\noindent\textbf{4. ¿Por qué \texorpdfstring{$a$}{a} tiene inverso módulo \texorpdfstring{$n$}{n} exactamente cuando \texorpdfstring{$\gcd(a, n) = 1$}{mcd(a, n) = 1}?}
+\begin{itemize}\setlength\itemsep{0pt}\setlength\parskip{0pt}
+    \item \textbf{Fundamento:} $au \equiv 1 \pmod n \iff au + ny = 1$. Cualquier divisor común de $a$ y $n$ divide a $au + ny$ y por ende a 1, obligando a que $\gcd(a, n) = 1$. Recíprocamente, si $\gcd = 1$, Bézout asegura la existencia de $x, y$, siendo $u = x \bmod n$ el inverso.
+    \item \textbf{Evidencia:} $7$ tuvo inverso en $\mathbb{Z}_{40}$ ($u = 23$, con $7 \times 23 = 161 \equiv 1$), pero $6$ en $\mathbb{Z}_9$ se rechazó ($\gcd = 3$). En 2\,000 pruebas, 1\,209 existieron ($\gcd=1$) y 791 se rechazaron con \texttt{ValueError}.
+\end{itemize}
+
+\smallskip
+\noindent\textbf{5. ¿Qué diferencia existe entre \texorpdfstring{$a^{-1}$}{a\textasciicircum -1} como fracción y como inverso modular?}
+\begin{itemize}\setlength\itemsep{0pt}\setlength\parskip{0pt}
+    \item \textbf{Como fracción en $\mathbb{R}$:} $1/a$ es división continua, existe $\forall a \neq 0$ y rara vez es entera ($7^{-1} \approx 0.1428$).
+    \item \textbf{Como inverso en $\mathbb{Z}_n$:} Es un entero en $\{1, \dots, n-1\}$ dependiente de $n$ que cumple $(a \cdot u) \bmod n = 1$. $7^{-1} \pmod{40} = 23$. Para $a = 2$, la fracción $0.5$ existe, pero en $\mathbb{Z}_{10}$ carece de inverso modular ($\gcd(2, 10) = 2 \neq 1$).
+\end{itemize}
+
+\smallskip
+\noindent\textbf{6. ¿Por qué no siempre puede cancelarse un factor en una congruencia?}
+\begin{itemize}\setlength\itemsep{0pt}\setlength\parskip{0pt}
+    \item \textbf{Fundamento:} Si $n$ es compuesto existen divisores de cero: de $ac \equiv bc \pmod n$ solo se concluye $a \equiv b \pmod{n / \gcd(c, n)}$.
+    \item \textbf{Evidencia:} $2 \cdot 1 \equiv 2 \cdot 6 \pmod{10}$, pero $1 \not\equiv 6 \pmod{10}$. Al cancelar el 2, el módulo se divide entre $\gcd(2, 10) = 2$, quedando la equivalencia válida $1 \equiv 6 \pmod 5$.
+\end{itemize}
+
+\smallskip
+\noindent\textbf{7. ¿Cómo determina el MCD la existencia y cantidad de soluciones de una congruencia lineal?}
+\begin{itemize}\setlength\itemsep{0pt}\setlength\parskip{0pt}
+    \item \textbf{Regla:} $ax - ny = b$ es múltiplo de $d = \gcd(a, n)$. Hay solución si y solo si $d \mid b$, habiendo exactamente $d$ soluciones canónicas separadas por $n/d$.
+    \item \textbf{Evidencia:} Para $14x \equiv 30 \pmod{100}$, $d = 2 \mid 30$ arroja exactamente 2 soluciones: $\{45, 95\}$ con paso 50. Para $6x \equiv 4 \pmod 9$, $d = 3 \nmid 4$ produce cero soluciones.
+\end{itemize}
+
+\smallskip
+\noindent\textbf{8. ¿Qué ahorro produce la descomposición binaria del exponente?}
+\begin{itemize}\setlength\itemsep{0pt}\setlength\parskip{0pt}
+    \item \textbf{Fundamento:} Reduce el costo de $e - 1$ multiplicaciones lineales a $O(\log e)$ mediante cuadrados sucesivos.
+    \item \textbf{Evidencia:} Para $e = 65\,535$ (16 bits), bajó de 65\,534 multiplicaciones directas ($247.7$ ms) a solo 31 operaciones binarias ($0.099$ ms), acelerando $2\,485\times$. Para 1024 bits, evita $10^{308}$ operaciones y resuelve en 1\,534 multiplicaciones (5 ms).
+\end{itemize}
+
+\smallskip
+\noindent\textbf{9. ¿Cómo influye la cantidad de bits iguales a 1 en las multiplicaciones del resultado?}
+\begin{itemize}\setlength\itemsep{0pt}\setlength\parskip{0pt}
+    \item \textbf{Fundamento:} Los cuadrados son fijos ($k - 1$), mientras que los productos acumulados equivalen exactamente a los bits en 1 (peso de Hamming $W(e)$).
+    \item \textbf{Evidencia:} Para 1024 bits, con un 1 ($e = 2^{1023}$) demandó 1024 operaciones ($3.4$ ms); con todos en 1 ($e = 2^{1024}-1$) tomó 2047 operaciones ($6.8$ ms). El tiempo escaló linealmente con la cantidad de unos.
+\end{itemize}
+
+\smallskip
+\noindent\textbf{10. ¿Por qué la reducción modular temprana evita números intermedios enormes?}
+\begin{itemize}\setlength\itemsep{0pt}\setlength\parskip{0pt}
+    \item \textbf{Fundamento:} Por la propiedad $(x \cdot y) \bmod n = ((x \bmod n)(y \bmod n)) \bmod n$, aplicar el módulo tras cada producto mantiene los operandos en $\{0, \dots, n-1\}$.
+    \item \textbf{Evidencia:} En 1024 bits, sin reducción previa $a^e$ alcanzaría $10^{308}$ bits (desbordando la memoria). Con reducción temprana, los intermedios nunca superan $n^2$ (2048 bits), estabilizando el costo por operación en $O(k^2)$.
+\end{itemize}
+
+\smallskip
+\noindent\textbf{11. ¿Qué función cumplen \texorpdfstring{$N_i$}{Ni} y \texorpdfstring{$M_i$}{Mi} en el TCR?}
+\begin{itemize}\setlength\itemsep{0pt}\setlength\parskip{0pt}
+    \item \textbf{Función:} $N_i = N/n_i$ anula el término en los demás módulos ($N_i \equiv 0 \pmod{n_j}, j \neq i$). $M_i = N_i^{-1} \bmod n_i$ calibra la base para que valga 1 en su propio módulo ($e_i = N_i M_i \equiv 1 \pmod{n_i}$).
+    \item \textbf{Evidencia:} Para $(3, 5, 7)$, las bases $e_1 = 70 \equiv (1, 0, 0)$, $e_2 = 21 \equiv (0, 1, 0)$ y $e_3 = 15 \equiv (0, 0, 1)$ sintetizan directamente $x = 2(70) + 3(21) + 2(15) = 233 \equiv 23 \pmod{105}$.
+\end{itemize}
+
+\smallskip
+\noindent\textbf{12. ¿Por qué la fórmula directa del TCR requiere módulos coprimos dos a dos?}
+\begin{itemize}\setlength\itemsep{0pt}\setlength\parskip{0pt}
+    \item \textbf{Existencia:} Porque exige calcular $M_i = N_i^{-1} \bmod n_i$, que existe si y solo si $\gcd(N_i, n_i) = 1$. Un factor común entre módulos divide a $N_i$ e imposibilita el inverso.
+    \item \textbf{Consistencia:} Evita contradicciones. Con módulos 4 y 6 ($\gcd = 2$), el sistema $x \equiv 1 \pmod 4$ y $x \equiv 2 \pmod 6$ es inconsistente (exige paridad impar y par a la vez).
+\end{itemize}
