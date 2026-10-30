@@ -1,0 +1,7 @@
+__pycache__/
+*.py[cod]
+latex/*.aux
+latex/*.log
+latex/*.toc
+latex/compilacion.log
+python/results/colab_resultados_anteriores.zip
