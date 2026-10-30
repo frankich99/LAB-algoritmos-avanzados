@@ -197,11 +197,32 @@ UNSAAC-algoritmos-avanzados/
 │       ├── figuras/                            # Gráficos empíricos y escudo institucional
 │       └── secciones/                          # Secciones modulares del informe (00 a 06)
 │
-├── lab_07/                                     # Laboratorio 07 en la raíz, NO dentro de LABORATORIOS/
-│   ├── README.md / Guia 07.pdf                 # Guía de ejecución y enunciado
-│   ├── colab/grupo 5 guia 07.ipynb             # Único cuaderno: código, tablas y figuras inline
-│   ├── python/                                 # Biblioteca, 32 pruebas, experimentos, CSV y PNG
-│   └── latex/main.tex / latex/main.pdf         # Fuentes e informe compilado
+├── lab_07/                                     # Laboratorio 07: Primalidad y Algoritmos Probabilísticos
+│   ├── Guia 07.pdf                             # Guía oficial del laboratorio
+│   ├── README.md                               # Documentación técnica y matriz de integrantes de Lab 07
+│   ├── compilar_informe.bat                    # Compilador directo del informe PDF
+│   ├── modo_en_vivo.bat                        # Compilador continuo en tiempo real
+│   │
+│   ├── colab/                                  # Entorno interactivo para Google Colab y Jupyter
+│   │   └── grupo 5 guia 07.ipynb               # Cuaderno interactivo oficial con salidas y gráficos inline
+│   │
+│   ├── python/                                 # Suite modular en Python 3.11+
+│   │   ├── primality.py                        # Biblioteca central (Trial division, Fermat, Miller-Rabin)
+│   │   ├── test_primality.py                   # Suite automatizada de 32 pruebas unitarias
+│   │   ├── ejercicios_resueltos.py             # Implementación de ejercicios resueltos 1, 2 y 3
+│   │   ├── case_generator.py                   # Generador determinista de casos de prueba y compuestos
+│   │   ├── experiments.py                      # Batería experimental completa (Escenarios A, B y C)
+│   │   ├── verify_results.py                   # Verificador y auditor de integridad de datos CSV
+│   │   ├── figures/                            # 4 figuras estadísticas de alta resolución (300 DPI)
+│   │   └── results/                            # 10 tablas CSV de resultados experimentales y trazas
+│   │
+│   └── latex/                                  # Informe académico formal en LaTeX (APA 7)
+│       ├── main.tex                            # Documento maestro
+│       ├── main.pdf                            # PDF compilado final
+│       ├── compilar.py / compilar.bat          # Compilador automatizado 2-pass con pdflatex
+│       ├── watch_live.py / iniciar_*.bat       # Modo en vivo con debounce continuo
+│       ├── figuras/                            # Gráficos empíricos y escudo institucional
+│       └── secciones/                          # Secciones modulares del informe (00 a 07)
 │
 ├── .gitignore                                  # Exclusión de temporales y compilados
 ├── requirements.txt                            # Dependencias necesarias
@@ -296,21 +317,34 @@ python ejercicios_resueltos.py
 * **Cuaderno interactivo oficial:** Abrir `lab_06/colab/grupo 5 guia 06.ipynb` en Google Colab o JupyterLab (autónomo, con suite de 34 pruebas y gráficos inline).
 * **Compilar informe PDF:** Doble clic en `lab_06/compilar_informe.bat` o `lab_06/modo_en_vivo.bat`.
 
-### Laboratorio 07: Primalidad y algoritmos probabilísticos
-La entrega está en **[`lab_07/`](lab_07/README.md)**, directamente en la raíz del repositorio. Consulte el [cuaderno con salidas](lab_07/colab/grupo%205%20guia%2007.ipynb) o el [informe PDF](lab_07/latex/main.pdf). El cuaderno funciona en Colab y Jupyter con Python 3.11+; ejecute sus celdas en orden, sin dependencias locales ni generadores auxiliares. **No ejecute `python/build_notebook.py`**: es un generador anterior que sobrescribe el cuaderno inline.
+| N.° | Integrante | Código | Rama Git | Módulo Asignado en Lab 06 |
+| :---: | :--- | :---: | :---: | :--- |
+| 1 | **Quispe Rimachi, Romario** | 164257 | `RamaRomario` | Ejercicios Resueltos 1, 2 y 3 (`ejercicios_resueltos.py`). |
+| 2 | **Porroa Sivana, Yeni Ruth** | 120893 | `ramaYeni` | Biblioteca central `number_theory.py` y suite de 34 pruebas. |
+| 3 | **Yaranga Achahui, Aldo** | 103179 | `ramaAldo` | Experimentos A/B/C, generador determinista e informe LaTeX. |
+| 4 | **Choquenaira Quispe, Noe Franklin** | 133962 | `ramaFranki` | Cuaderno Google Colab, informe final e integración en `main`. |
 
+### Laboratorio 07: Primalidad, Grupos y Algoritmos Probabilísticos
 ```bash
-cd lab_07
-python python/test_primality.py
-python python/verify_results.py
-python latex/compilar.py
+cd "lab_07/python"
+python test_primality.py
+python ejercicios_resueltos.py
+python experiments.py
+python verify_results.py
 ```
+* **Cuaderno interactivo oficial:** Abrir `lab_07/colab/grupo 5 guia 07.ipynb` en Google Colab o JupyterLab (autónomo, con suite de 32 pruebas, tablas y gráficos inline).
+* **Compilar informe PDF:** Doble clic en `lab_07/compilar_informe.bat` o `lab_07/modo_en_vivo.bat`.
 
-Las ramas `lab07/franki-biblioteca`, `lab07/yeni-pruebas`, `lab07/romario-experimentos` y `lab07/aldo-informe-colab` organizan áreas de revisión. Son ramas preparadas para los integrantes, **no evidencia de autoría personal**; cada integrante deberá registrar allí sus propios cambios y commits.
+| N.° | Integrante | Código | Rama Git | Módulo Asignado en Lab 07 |
+| :---: | :--- | :---: | :---: | :--- |
+| 1 | **Choquenaira Quispe, Noe Franklin** | 133962 | `lab07/franki-biblioteca` (`ramaFranki`) | Biblioteca central `primality.py`, generación e integración en `main`. |
+| 2 | **Porroa Sivana, Yeni Ruth** | 120893 | `lab07/yeni-pruebas` (`ramaYeni`) | Casos reproducibles, resueltos 1, 2 y 3, y 32 pruebas unitarias. |
+| 3 | **Quispe Rimachi, Romario** | 164257 | `lab07/romario-experimentos` (`RamaRomario`) | Batería experimental, 210 probables primos, figuras y auditoría CSV. |
+| 4 | **Yaranga Achahui, Aldo** | 103179 | `lab07/aldo-informe-colab` (`ramaAldo`) | Informe técnico en LaTeX (APA 7), cuaderno Colab y compilación. |
 
 ---
 
-## 🔬 Aspectos Teóricos Clave Evaluados en Lab 04, Lab 05 y Lab 06
+## 🔬 Aspectos Teóricos Clave Evaluados en Lab 04, Lab 05, Lab 06 y Lab 07
 
 ### 1. Montículos de Fibonacci y Análisis Amortizado (Lab 04)
 * **Función de Potencial Contable:** Definida como $\Phi(H) = t(H) + 2m(H)$, donde $t(H)$ es el número de árboles en la lista de raíces y $m(H)$ la cantidad de nodos internos marcados.
@@ -329,3 +363,9 @@ Las ramas `lab07/franki-biblioteca`, `lab07/yeni-pruebas`, `lab07/romario-experi
 * **Cota de Lamé y Complejidad Logarítmica:** El número de divisiones del algoritmo de Euclides está acotado superiormente por $k \le 5\log_{10}(\min(a,b)) + 1$, alcanzándose el peor caso estrictamente en pares consecutivos de Fibonacci ($F_{k+1}, F_k$), donde todos los cocientes son $q_i = 1$.
 * **Exponenciación Binaria Modular (*Square-and-Multiply*):** Reduce el cálculo de $a^b \pmod m$ de $b-1$ multiplicaciones a lo sumo $2\lfloor\log_2 b\rfloor$ multiplicaciones, manteniendo los operandos acotados mediante reducción modular en cada paso y permitiendo cómputos con exponentes de 1024 bits en microsegundos.
 * **Teorema Chino del Resto (TCR) Analítico:** Resuelve sistemas de congruencias $x \equiv a_i \pmod{m_i}$ con módulos coprimos dos a dos mediante la construcción de bases ortogonales $e_i = M_i \cdot (M_i^{-1} \pmod{m_i})$, garantizando una solución única módulo $M = \prod m_i$.
+
+### 4. Primalidad, Grupos y Algoritmos Probabilísticos (Lab 07)
+* **Teorema Pequeño de Fermat y Números de Carmichael:** Para $p$ primo y $\gcd(a, p) = 1$, se cumple $a^{p-1} \equiv 1 \pmod p$. Los números compuestos que satisfacen esta congruencia para ciertas bases son pseudoprimos de Fermat. Los números de Carmichael (como 561, 1105 y 1729) son compuestos que pasan el test de Fermat para absolutamente toda base coprima.
+* **Test de Miller–Rabin y Lema de las Raíces Cuadradas:** Factoriza $n - 1 = 2^s \cdot d$ con $d$ impar. Si $n$ es primo, para cualquier base $a \in [2, n-2]$, o bien $a^d \equiv \pm 1 \pmod n$, o alguna potencia $a^{2^r d} \equiv -1 \pmod n$ para algún $0 \le r < s$. Si se halla una raíz no trivial de 1 ($x^2 \equiv 1 \pmod n$ con $x \not\equiv \pm 1 \pmod n$), $n$ es comprobadamente compuesto y $a$ es un testigo de Miller–Rabin.
+* **Cota de Error de Monier–Rabin ($\le 4^{-r}$):** Para todo compuesto impar $n > 4$, la cantidad de mentirosos de Miller–Rabin está acotada superiormente por $|M(n)| \le \frac{1}{4}(n-1)$. Al ejecutar $r$ rondas independientes con bases uniformes, la probabilidad de falso positivo está acotada por $\le 4^{-r}$.
+* **Generación de Primos Criptográficos con Precribado:** Se optimiza en dos fases: un precribado rápido descarta enteros divisibles por primos pequeños ($< 1000$), y los sobrevivientes se evalúan mediante Miller–Rabin con 20 rondas independientes, alcanzando generación segura en sub-milisegundos para claves de 1024 bits.

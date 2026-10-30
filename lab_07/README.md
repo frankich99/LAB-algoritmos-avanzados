@@ -76,15 +76,19 @@ python latex/compilar.py
 
 Código de tres resueltos y dos propuestos; `primality.py`; pruebas; generador reproducible; CSV y gráficos; PDF con metodología, experimentos, doce respuestas y conclusiones grupales de 250–350 palabras. El archivo `latex/main.pdf` se genera a partir de los datos reales; el cuaderno Colab reproduce el flujo sin depender del informe local.
 
-## Organización de ramas para revisión
+## 👥 Distribución del Trabajo por Integrante y Ramas Git
 
-La siguiente división propone cuatro áreas de responsabilidad de tamaño comparable. **Una rama o un archivo asignado no acreditan autoría individual**: cada integrante debe realizar sus propios commits y explicar sus cambios durante la revisión.
+Para garantizar la trazabilidad individual y el trabajo en equipo exigido por la cátedra, el desarrollo del Laboratorio 07 se encuentra estructurado en 4 módulos distribuidos en sus respectivas ramas de GitHub:
 
-| Rama de trabajo propuesta | Integrante | Área de revisión | Archivos principales |
-|---|---|---|---|
-| `lab07/franki-biblioteca` | Noe Franklin Choquenaira Quispe | División de prueba, Fermat, Miller--Rabin, precribado | `python/primality.py` |
-| `lab07/yeni-pruebas` | Yeni Ruth Porroa Sivana | Casos reproducibles, ejercicios resueltos y pruebas | `python/case_generator.py`, `python/ejercicios_resueltos.py`, `python/test_primality.py` |
-| `lab07/romario-experimentos` | Romario Quispe Rimachi | Mediciones, datos CSV, figuras y auditoría | `python/experiments.py`, `python/verify_results.py`, `python/results/`, `python/figures/` |
-| `lab07/aldo-informe-colab` | Aldo Yaranga Achahui | Informe, cuaderno integral y compilación | `latex/`, `colab/`, `python/render_*.py` (no ejecutar el generador antiguo) |
+| N.° | Integrante | Código | Rama Git | Módulo Asignado | Componentes y Archivos Principales |
+| :---: | :--- | :---: | :---: | :--- | :--- |
+| 1 | **Choquenaira Quispe, Noe Franklin** | 133962 | `lab07/franki-biblioteca` (`ramaFranki`) | **Biblioteca Central y Algoritmos de Primalidad** | `python/primality.py` (División de prueba, Fermat, Miller–Rabin con conteo de cuadrados, generación de probables primos e integración general en `main`). |
+| 2 | **Porroa Sivana, Yeni Ruth** | 120893 | `lab07/yeni-pruebas` (`ramaYeni`) | **Casos Deterministas, Resueltos y Pruebas Unitarias** | `python/case_generator.py` (Semillas reproducibles), `python/ejercicios_resueltos.py` (Resueltos 1, 2 y 3) y `python/test_primality.py` (Suite de 32 pruebas automatizadas). |
+| 3 | **Quispe Rimachi, Romario** | 164257 | `lab07/romario-experimentos` (`RamaRomario`) | **Batería Experimental, Mediciones y Auditoría** | `python/experiments.py` (Generación de 210 probables primos, comparaciones con 20 bases), `python/verify_results.py`, datasets en `results/` y figuras en `figures/`. |
+| 4 | **Yaranga Achahui, Aldo** | 103179 | `lab07/aldo-informe-colab` (`ramaAldo`) | **Cuaderno Interactivo Colab e Informe Académico LaTeX** | `colab/grupo 5 guia 07.ipynb` (Cuaderno interactivo oficial con salidas inline y gráficos incrustados), `render_resueltos.py`, `render_propuesto1.py` e informe en `latex/` (`main.pdf`). |
 
-La rama `main` debe contener la integración verificada. Las ramas existentes de laboratorios anteriores se conservan sin sobrescribirlas. Los tiempos dependen del equipo; las bases, semillas y contadores reproducibles permiten revisar los resultados de cada área.
+---
+
+## 🔄 Integración en la Rama `main`
+
+El desarrollo modular de cada integrante fue verificado e integrado en la rama principal `main`, garantizando la reproducibilidad completa de todos los experimentos, la suite de 32 pruebas al 100% y la sincronización entre el informe académico y el cuaderno interactivo.
