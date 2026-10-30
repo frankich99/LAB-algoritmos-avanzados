@@ -49,7 +49,7 @@ Cada laboratorio incluye:
 | **Lab 03** | Aproximación Avanzada: Vertex Cover y FPTAS | Algoritmo 2-Aproximado por Matching Maximal, DP por Valores, Knapsack FPTAS con escalamiento $K = \frac{\varepsilon V_{\max}}{n}$ | Vertex Cover: $|C| \le 2\,\text{OPT}$<br>FPTAS: $\text{ALG}_\varepsilon \ge (1-\varepsilon)\,\text{OPT}$, $O(n^3/\varepsilon)$ |
 | **Lab 04** | Montículos de Fibonacci y Análisis Amortizado | Montículo de Fibonacci con punteros circulares, consolidación por grados, cortes en cascada, `heapq` perezoso y Dijkstra | Potencial: $\Phi(H) = t(H) + 2m(H)$<br>`insert`: $O(1)$, `decrease-key`: $O(1)$, `extract-min`: $O(\log n)$<br>Dijkstra: $O(|E| + |V|\log |V|)$ |
 | **Lab 05** | Splay Trees y Árboles Dinámicos Link-Cut | Splay Tree autoajustable, partición en caminos preferidos, Link-Cut Forest con punteros virtuales (*path-parent*), reversión perezosa, sumas de camino | Potencial Sleator-Tarjan: $O(\log n)$ amortizado por operación<br>9 invariantes estructurales validadas al 100%<br>15,000 operaciones diferenciales con 0 discrepancias frente a BFS |
-| **Lab 06** | Algoritmos de Teoría de Números y Aritmética Modular | MCD Euclides clásico y extendido ($ax+by=d$), Inversos modulares, Congruencias lineales, Exponenciación binaria modular ($O(\log b)$) y Teorema Chino del Resto (TCR) analítico con traza | Teorema de Lamé: $k \le 5\log_{10}(\min(a,b)) + 1$<br>Bezout: $ax \equiv d \pmod m$<br>Potencia rápida: $\le 2\lfloor\log_2 b\rfloor$ mults vs $b-1$<br>TCR: solución única $\pmod M$ con $\gcd(m_i, m_j)=1$ |
+| **[Lab 06](lab_06/)** | Algoritmos de Teoría de Números y Aritmética Modular | MCD Euclides clásico y extendido ($ax+by=d$), Inversos modulares, Congruencias lineales, Exponenciación binaria modular ($O(\log b)$) y Teorema Chino del Resto (TCR) analítico con traza | Teorema de Lamé: $k \le 5\log_{10}(\min(a,b)) + 1$<br>Bezout: $ax \equiv d \pmod m$<br>Potencia rápida: $\le 2\lfloor\log_2 b\rfloor$ mults vs $b-1$<br>TCR: solución única $\pmod M$ con $\gcd(m_i, m_j)=1$ |
 
 ---
 
@@ -169,7 +169,7 @@ UNSAAC-algoritmos-avanzados/
 │       ├── figuras/                            # 20 figuras de alta resolución y escudo UNSAAC
 │       └── secciones/                          # Secciones modulares del informe (00 a 06)
 │
-├── labo_06/                                    # Laboratorio 06: Algoritmos de Teoría de Números y Aritmética Modular
+├── lab_06/                                    # Laboratorio 06: Algoritmos de Teoría de Números y Aritmética Modular
 │   ├── Guia 06.pdf                             # Guía oficial del laboratorio
 │   ├── compilar_informe.bat                    # Compilador directo del informe PDF
 │   ├── modo_en_vivo.bat                        # Compilador continuo en tiempo real
@@ -207,8 +207,8 @@ UNSAAC-algoritmos-avanzados/
 
 1. **Clonar el repositorio:**
    ```bash
-   git clone https://github.com/frankich99/UNSAAC-algoritmos-avanzados.git
-   cd UNSAAC-algoritmos-avanzados
+   git clone https://github.com/frankich99/LAB-algoritmos-avanzados.git
+   cd LAB-algoritmos-avanzados
    ```
 
 2. **Requisitos de Python:**
@@ -281,13 +281,13 @@ python ejecutar_todo.py
 
 ### Laboratorio 06: Algoritmos Fundamentales de Teoría de Números
 ```bash
-cd "labo_06/python"
+cd "lab_06/python"
 python test_number_theory.py
 python experiments.py
 python ejercicios_resueltos.py
 ```
-* **Cuaderno interactivo oficial:** Abrir `labo_06/colab/grupo 5 guia 06.ipynb` en Google Colab o JupyterLab (autónomo, con suite de 34 pruebas y gráficos inline).
-* **Compilar informe PDF:** Doble clic en `labo_06/compilar_informe.bat` o `labo_06/modo_en_vivo.bat`.
+* **Cuaderno interactivo oficial:** Abrir `lab_06/colab/grupo 5 guia 06.ipynb` en Google Colab o JupyterLab (autónomo, con suite de 34 pruebas y gráficos inline).
+* **Compilar informe PDF:** Doble clic en `lab_06/compilar_informe.bat` o `lab_06/modo_en_vivo.bat`.
 
 ---
 

@@ -16,17 +16,17 @@ Para garantizar la trazabilidad individual y el trabajo en equipo exigido por la
 
 | N.° | Integrante | Código | Rama Git | Módulo Asignado | Componentes y Archivos Principales |
 | :---: | :--- | :---: | :---: | :--- | :--- |
-| 1 | **Quispe Rimachi, Romario** | 164257 | `RamaRomario` | **Ejercicios Resueltos y Algoritmos Base** | `labo_06/python/ejercicios_resueltos.py` (Resueltos 1, 2 y 3: Euclides clásico vs extendido, inversos modulares y exponenciación modular). |
-| 2 | **Porroa Sivana, Yeni Ruth** | 120893 | `ramaYeni` | **Biblioteca Central y Pruebas Unitarias** | `labo_06/python/number_theory.py` (MCD, Euclides extendido, congruencias, TCR analítico con traza) y `labo_06/python/test_number_theory.py` (Suite de 34 pruebas automatizadas). |
-| 3 | **Yaranga Achahui, Aldo** | 103179 | `ramaAldo` | **Experimentos, Resultados e Informe LaTeX** | `labo_06/python/experiments.py`, `case_generator.py`, `results/`, `figures/` e informe LaTeX en `labo_06/latex/` (secciones 00 a 06, figuras, scripts de compilación). |
-| 4 | **Choquenaira Quispe, Noe Franklin** | 133962 | `ramaFranki` | **Google Colab, Informe Final e Integración** | `labo_06/colab/` (Cuaderno `grupo 5 guia 06.ipynb` pre-ejecutado con salidas inline), `labo_06/latex/main.pdf` (17 páginas) e integración completa en `main`. |
+| 1 | **Quispe Rimachi, Romario** | 164257 | `RamaRomario` | **Ejercicios Resueltos y Algoritmos Base** | `lab_06/python/ejercicios_resueltos.py` (Resueltos 1, 2 y 3: Euclides clásico vs extendido, inversos modulares y exponenciación modular). |
+| 2 | **Porroa Sivana, Yeni Ruth** | 120893 | `ramaYeni` | **Biblioteca Central y Pruebas Unitarias** | `lab_06/python/number_theory.py` (MCD, Euclides extendido, congruencias, TCR analítico con traza) y `lab_06/python/test_number_theory.py` (Suite de 34 pruebas automatizadas). |
+| 3 | **Yaranga Achahui, Aldo** | 103179 | `ramaAldo` | **Experimentos, Resultados e Informe LaTeX** | `lab_06/python/experiments.py`, `case_generator.py`, `results/`, `figures/` e informe LaTeX en `lab_06/latex/` (secciones 00 a 06, figuras, scripts de compilación). |
+| 4 | **Choquenaira Quispe, Noe Franklin** | 133962 | `ramaFranki` | **Google Colab, Informe Final e Integración** | `lab_06/colab/` (Cuaderno `grupo 5 guia 06.ipynb` pre-ejecutado con salidas inline), `lab_06/latex/main.pdf` (17 páginas) e integración completa en `main`. |
 
 ---
 
 ## Estructura del Proyecto
 
 ```text
-labo_06/
+lab_06/
 ├── colab/
 │   ├── grupo 5 guia 06.ipynb        # Cuaderno Google Colab con salidas y gráficos incrustados
 │   └── README.md                    # Instrucciones de ejecución en la nube
