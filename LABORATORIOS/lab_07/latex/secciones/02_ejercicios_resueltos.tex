@@ -1,0 +1,21 @@
+% !TEX root = ../main.tex
+\section{Ejercicios resueltos}
+El archivo \texttt{python/ejercicios\_resueltos.py} contiene los tres ejercicios ejecutables y comprueba los valores con aserciones.
+
+\subsection{Resuelto 1: división de prueba y Fermat}
+La división de prueba trata $n<2$, $2$, $3$, pares y divisores impares hasta \texttt{isqrt(n)}. Fermat verifica primero $\gcd(a,n)$ y después computa $a^{n-1}\bmod n$. El siguiente código utiliza las funciones de \texttt{primality.py} y exhibe los tres casos pedidos:
+\input{secciones/02_resuelto_1_generado.tex}
+Aquí $341=11\cdot31$ pasa Fermat base $2$, aunque es compuesto. Para $561$, la base $2$ también pasa Fermat por ser Carmichael; la base $3$ comparte factor con $561$ y certifica composición.
+
+\subsection{Resuelto 2: Miller--Rabin con traza verificable}
+El par $(s,d)$ de $221-1=220=2^2\cdot55$ y la cadena de residuos de la base $2$ son:
+\begin{equation}
+2^{55}\bmod221=128,\qquad128^2\bmod221=30\neq220.
+\end{equation}
+No aparece $-1\equiv220$: la base $2$ demuestra que $221$ es compuesto. La salida incluye $n$, $a$, $s$, $d$, residuos, motivo y contadores de operaciones:
+\input{secciones/02_resuelto_2_generado.tex}
+Se obtuvieron además las trazas exigidas: para $(n,a)=(341,2)$, $s=2$, $d=85$, cadena $[32,1]$; para $(561,2)$, $s=4$, $d=35$, cadena $[263,166,67,1]$. Ambas se rechazan por una raíz no trivial de $1$. En $341$, $\gcd(32-1,341)=31$ y $\gcd(32+1,341)=11$. Todas las trazas, también las de $1105$, $1729$ y un mentiroso fuerte de $25$, están en \texttt{results/trazas\_miller\_rabin.csv}.
+
+\subsection{Resuelto 3: prueba repetida y candidatos}
+\input{secciones/02_resuelto_3_generado.tex}
+Los bits superior e inferior se fijan a $1$, respectivamente para garantizar longitud exacta e imparidad. Se eligió el primo conocido $1009$, mayor que los primos del precribado, para que se ejecuten realmente las cinco rondas: su resultado es ``probable primo'' y la cota condicional es $4^{-5}=1/1024$. Con semilla fija la ejecución es reproducible, pero \emph{no} segura para generar claves.

@@ -1,0 +1,17 @@
+n,clasificacion,division_prueba,fermat_base_2,miller_rabin_base_2,precribado
+0,no_primo_ni_compuesto,False,no_aplica,no_aplica,False
+1,no_primo_ni_compuesto,False,no_aplica,no_aplica,False
+2,primo,True,no_aplica,no_aplica,False
+3,primo,True,no_aplica,no_aplica,False
+4,compuesto,False,no_aplica,no_aplica,True
+5,primo,True,True,True,False
+7,primo,True,True,True,False
+9,compuesto,False,False,False,True
+25,compuesto,False,False,False,True
+49,compuesto,False,False,False,True
+97,primo,True,True,True,False
+221,compuesto,False,False,False,True
+341,compuesto,False,True,False,True
+561,compuesto,False,True,False,True
+1105,compuesto,False,True,False,True
+1729,compuesto,False,True,False,True

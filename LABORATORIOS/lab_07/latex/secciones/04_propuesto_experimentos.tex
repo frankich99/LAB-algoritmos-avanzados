@@ -1,0 +1,43 @@
+% !TEX root = ../main.tex
+\section{Ejercicio propuesto 2: comparación experimental}
+
+\subsection{Diseño y metodología de medición}
+Se estudiaron longitudes de $16$, $32$, $64$, $128$, $256$, $512$ y $1024$ bits. Las semillas de generación, comparación y simulación fueron \texttt{20260701}, \texttt{20260702} y \texttt{20260703}. Por tamaño se generaron $30$ probables primos y, para comparar pruebas, se prepararon $8$ candidatos aceptados y $8$ compuestos impares construidos como producto de dos factores mayores que uno. Los candidatos de $16$ y $32$ bits se verificaron además por división de prueba; los mayores no se consideran primos certificados.
+
+Las entradas y $20$ bases válidas por entrada se seleccionaron antes de medir. Fermat y Miller--Rabin evaluaron las mismas entradas y bases iniciales con $1$, $5$, $10$ y $20$ rondas; la división de prueba se limitó a $16$ y $32$ bits. Cada medición se repitió siete veces con \texttt{perf\_counter\_ns()}, sin impresión, selección de bases ni escritura de archivos dentro del intervalo medido. Se registraron mínimo, mediana, máximo, rondas y cuadrados modulares. El precribado se desactivó \emph{solo} en la comparación para observar el costo de las pruebas; durante la generación permaneció activo y se contaron sus descartes.
+
+\subsection{Comparación de tiempo y operaciones}
+El Cuadro \ref{tab:tiempos} compara las medianas por tipo de entrada. El Cuadro \ref{tab:dispersion} presenta mínimo, mediana y máximo de siete repeticiones. Los registros individuales y las bases utilizadas están en \path{python/results/comparacion_metodos.csv} y \path{python/results/entradas_y_bases.csv}.
+\input{secciones/04_tab_tiempos.tex}
+\input{secciones/04_tab_dispersion.tex}
+\input{secciones/04_analisis_costo.tex}
+
+\begin{figure}[H]\centering
+\includegraphics[width=.88\textwidth]{fig1_tiempo_vs_bits.png}
+\caption{Tiempo mediano por prueba y longitud binaria; escala temporal logarítmica. La división se ejecuta solo hasta $32$ bits.}\label{fig:tiempo}
+\end{figure}
+\begin{figure}[H]\centering
+\includegraphics[width=.88\textwidth]{fig2_cuadrados_vs_bits.png}
+\caption{Cuadrados modulares efectivamente realizados por Miller--Rabin con $1$, $5$, $10$ y $20$ rondas.}\label{fig:cuadrados}
+\end{figure}
+Las rondas terminan temprano si se encuentra un testigo de composición. Sobre candidatos aceptados se completan todas las rondas; por ello es necesario distinguir el costo de una prueba individual del costo total de buscar un probable primo.
+
+\subsection{Generación y precribado}
+El Cuadro \ref{tab:generacion} resume $30$ generaciones por tamaño: candidatos, descartes y tiempo. La semilla y los contadores individuales constan en \path{python/results/generacion_210_probables_primos.csv}.
+\input{secciones/04_tab_generacion.tex}
+\input{secciones/04_analisis_generacion.tex}
+\begin{figure}[H]\centering
+\includegraphics[width=.88\textwidth]{fig3_candidatos_vs_bits.png}
+\caption{Candidatos impares por probable primo: media de $30$ muestras y aproximación $L\ln(2)/2$.}\label{fig:candidatos}
+\end{figure}
+El precribado evita exponenciaciones en compuestos con factores pequeños, pero no cambia la densidad de primos entre todos los candidatos originalmente muestreados.
+
+\subsection{Testigos, mentirosos fuertes y probabilidad de error}
+El Cuadro \ref{tab:mentirosos} enumera la cantidad de bases testigo y mentirosas fuertes; el archivo \texttt{clasificacion\_bases.csv} identifica cada base válida del rango pequeño. Para un compuesto impar fijo, si $p_n$ es la fracción de mentirosos fuertes, la probabilidad exacta de pasar $r$ bases elegidas uniformemente con reemplazo es $p_n^r$. La cota universal $4^{-r}$ es un límite superior, no la frecuencia esperada en una muestra concreta.
+\input{secciones/04_tab_mentirosos.tex}
+\input{secciones/04_tab_error.tex}
+\begin{figure}[H]\centering
+\includegraphics[width=.88\textwidth]{fig4_error_empirico.png}
+\caption{Compuesto $25$: tasa exacta $p_n^r$, cota $4^{-r}$ y $3000$ ensayos por número de rondas. Los ceros observados se anotan como $0/3000$, no como probabilidades positivas.}\label{fig:error}
+\end{figure}
+La simulación consulta la clasificación exhaustiva de bases de $n\in\{25,91,121,341,561\}$ para $r\in\{1,5,10,20\}$; no se interpreta como una medición del tiempo de Miller--Rabin. No observar falsos positivos en una muestra finita no demuestra error nulo. Fermat no dispone de una cota análoga para números de Carmichael.

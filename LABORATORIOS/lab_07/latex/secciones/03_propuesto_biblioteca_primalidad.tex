@@ -1,0 +1,37 @@
+% !TEX root = ../main.tex
+\section{Ejercicio propuesto 1: biblioteca de primalidad}
+
+\subsection{Problema e interfaz solicitada}
+Se integraron en \texttt{python/primality.py} las siete funciones de la guía. El objetivo no es confundir ``pasa una ronda'' con ``es primo'': una base testigo prueba composición, mientras que un candidato que supera las rondas se informa como probable primo. La interfaz pública y el tipo de resultado de cada operación se presentan en el Cuadro \ref{tab:interfaz}.
+\begin{table}[H]\centering\small
+\caption{Funciones de la biblioteca y sus contratos}\label{tab:interfaz}
+\begin{tabularx}{\textwidth}{@{}lX@{}}\toprule
+Función & Entrada, salida y convención \\ \midrule
+\texttt{trial\_division(n)} & Booleano determinista; $n<2$ devuelve \texttt{False}. \\
+\texttt{fermat\_round(n,a)} & Booleano con $2\le a\le n-2$; \texttt{False} certifica compuesto. \\
+\texttt{decompose(n)} & Para $n\ge3$ impar, devuelve $(s,d)$ con $n-1=2^sd$ y $d$ impar. \\
+\texttt{miller\_rabin\_round(n,a,trace)} & Devuelve $(\textit{pasa},\textit{detalle})$; el detalle registra $n,a,s,d$, residuos opcionales y contadores. \\
+\texttt{is\_probable\_prime(n,rounds,rng)} & Respuesta booleana con precribado y bases aleatorias. \\
+\texttt{generate\_candidate(bits,rng)} & Entero impar de exactamente $bits\ge2$ bits. \\
+\texttt{generate\_probable\_prime(bits,rounds)} & Muestrea candidatos hasta encontrar uno aceptado; puede devolver contadores. \\ \bottomrule
+\end{tabularx}\end{table}
+
+\subsection{Construcción paso a paso}
+\begin{enumerate}
+\item \textbf{Entradas y casos límite.} Se rechazan tipos no enteros, bases fuera de $[2,n-2]$ y descomposiciones no válidas; $0$ y $1$ no son primos ni compuestos. La división de prueba llega hasta \texttt{isqrt(n)}.
+\item \textbf{Fermat configurable.} \texttt{fermat\_test} acepta una secuencia de bases; primero comprueba $\gcd(a,n)$ y luego la congruencia. $341$ supera la base $2$ pese a ser compuesto.
+\item \textbf{Miller--Rabin auditable.} Se escribe $n-1=2^sd$, se calcula $a^d\bmod n$ y se registra cada residuo de la cadena hasta hallar $-1$, una raíz no trivial de $1$ o un testigo. La exponenciación binaria propia cuenta cuadrados realizados; no se infiere el trabajo interno de \texttt{pow()}.
+\item \textbf{Precribado y generación.} Una criba construye los primos hasta $997$. Si el candidato coincide con uno de ellos, queda certificado; si es divisible por alguno, se descarta. Los bits superior e inferior del candidato se fijan a uno. Se prueban nuevos candidatos hasta superar las rondas solicitadas.
+\end{enumerate}
+
+\subsection{Resultados reproducibles y propiedades verificadas}
+El Cuadro \ref{tab:casos_propuesto1} sale de \texttt{casos\_conocidos.csv}. En las columnas de Fermat y Miller--Rabin, ``sí'' significa \emph{supera la base 2}, no primalidad certificada; para $n<5$ se señala que la ronda no aplica. En $341$, $561$, $1105$ y $1729$ Fermat pasa, pero Miller--Rabin con base $2$ encuentra un testigo.
+\input{secciones/03_casos_generados.tex}
+
+La ronda devuelve también $n$, $a$, $s$, $d$ y residuos. Los tres casos exigidos se cotejaron con \texttt{trazas\_miller\_rabin.csv} y se presentan en el Cuadro \ref{tab:trazas_propuesto1}. Las cadenas de $341$ y $561$ terminan en una raíz no trivial de $1$, lo que demuestra composición; para $221$ no aparece $-1$.
+\input{secciones/03_trazas_generadas.tex}
+
+La suite \texttt{python/test\_primality.py} ejecuta $32$ pruebas: los primeros $10\,001$ enteros frente a una criba independiente; $1000$ valores aleatorios menores que $10^6$ frente a división de prueba; cuadrados de primos, extremos de bases y distintas rondas. \texttt{classify\_bases} clasifica exhaustivamente cada base válida de los compuestos impares $5\le n<200$ y de $221$, $341$ y $561$. Se comprobó que todo primo pequeño supera todas sus bases válidas y que los candidatos de $16$ a $1024$ bits son impares y conservan la longitud solicitada.
+
+\subsection{Interpretación del resultado y seguridad}
+\texttt{primality\_report} registra resultado, rondas solicitadas y ejecutadas, bases, cuadrados y descarte por precribado. Un compuesto detectado tiene error cero; para un compuesto impar que \emph{podría} superar $r$ bases elegidas uniformemente e independientemente, la cota es $4^{-r}$. Una lista de bases fija o una semilla reproducible no constituye una garantía criptográfica para esa ejecución. En ausencia de \texttt{rng}, el muestreo usa \texttt{secrets.SystemRandom}; \texttt{random.Random(seed)} se reserva para comparar experimentos y nunca para claves.

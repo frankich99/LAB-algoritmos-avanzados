@@ -1,0 +1,23 @@
+\begin{lstlisting}[language=Python,caption={Miller--Rabin con traza: código ejecutable}]
+def resuelto_2():
+    """Traza verificable de Miller--Rabin para n=221, base a=2."""
+    assert decompose(221) == (2, 55)
+    passed, detail = miller_rabin_round(221, 2, trace=True)
+    assert not passed and detail["residuos"] == [128, 30]
+    assert (detail["n"], detail["a"], detail["s"], detail["d"]) == (221, 2, 2, 55)
+    return {"pasa": passed, **detail}
+\end{lstlisting}
+\noindent\textbf{Resultado de la ejecución:}
+\begin{lstlisting}[style=consolestyle]
+>>> resuelto_2()
+{'pasa': False,
+ 'n': 221,
+ 'a': 2,
+ 's': 2,
+ 'd': 55,
+ 'residuos': [128, 30],
+ 'cuadrados_cadena': 1,
+ 'cuadrados_modulares': 6,
+ 'productos_modulares': 5,
+ 'motivo': 'sin_menos_uno'}
+\end{lstlisting}
