@@ -1,0 +1,85 @@
+% !TEX root = ../main.tex
+\section{Ejercicios resueltos}
+
+\subsection{Ejercicio resuelto 1: Euclides con traza y coeficientes de Bézout}
+Implementamos el algoritmo de Euclides registrando la traza de divisiones sucesivas y la variante extendida iterativa para calcular el MCD y los coeficientes de Bézout:
+
+\begin{lstlisting}[language=Python, caption={MCD con traza y Euclides extendido}, label={lst:resuelto_1}]
+def gcd_trace(a, b):
+    a, b = abs(a), abs(b)
+    trace = []
+    while b != 0:
+        q, r = divmod(a, b)
+        trace.append((a, b, q, r))
+        a, b = b, r
+    return a, trace
+
+def extended_gcd(a, b):
+    old_r, r = abs(a), abs(b)
+    old_s, s, old_t, t = 1, 0, 0, 1
+    while r != 0:
+        q = old_r // r
+        old_r, r = r, old_r - q * r
+        old_s, s = s, old_s - q * s
+        old_t, t = t, old_t - q * t
+    x = old_s if a >= 0 else -old_s
+    y = old_t if b >= 0 else -old_t
+    return old_r, x, y
+\end{lstlisting}
+
+\textbf{Validación del caso de la guía $(a = 252, b = 105)$:}
+La traza registra exactamente 3 divisiones euclidianas:
+\begin{align*}
+    \text{Paso 1: } & 252 = 105 \cdot 2 + 42 \quad (q_1 = 2, r_1 = 42) \\
+    \text{Paso 2: } & 105 = 42 \cdot 2 + 21 \quad (q_2 = 2, r_2 = 21) \\
+    \text{Paso 3: } & 42 = 21 \cdot 2 + 0 \quad (q_3 = 2, r_3 = 0)
+\end{align*}
+El último residuo no nulo es $d = 21$. Los coeficientes de Bézout obtenidos son $x = -2$ e $y = 5$, verificándose la identidad: $252(-2) + 105(5) = -504 + 525 = 21 = d$.
+
+\subsection{Ejercicio resuelto 2: Inversos y congruencias lineales}
+Se calculan inversos multiplicativos y se resuelven congruencias lineales canónicas:
+
+\begin{lstlisting}[language=Python, caption={Inverso modular y congruencias lineales}, label={lst:resuelto_2}]
+def modular_inverse(a, n):
+    if n <= 1: raise ValueError("El modulo debe ser mayor que uno")
+    d, x, _ = extended_gcd(a, n)
+    if d != 1: raise ValueError("El inverso modular no existe")
+    return x % n
+
+def solve_linear_congruence(a, b, n):
+    if n <= 0: raise ValueError("El modulo debe ser positivo")
+    d, x, _ = extended_gcd(a, n)
+    if b % d != 0: return []
+    reduced_n = n // d
+    x0 = (x * (b // d)) % reduced_n
+    return [(x0 + k * reduced_n) % n for k in range(d)]
+\end{lstlisting}
+
+\textbf{Validación de aserciones de la guía:}
+\begin{itemize}\setlength\itemsep{0pt}\setlength\parskip{0pt}
+    \item Para $a = 7, n = 40$: $\gcd(7, 40) = 1$, obteniéndose $u = 23$. Se verifica $(7 \times 23) \bmod 40 = 161 \bmod 40 = 1$.
+    \item Para $14x \equiv 30 \pmod{100}$: $d = \gcd(14, 100) = 2$ y $2 \mid 30$. Se obtienen exactamente $d = 2$ soluciones en $\mathbb{Z}_{100}$: $\{45, 95\}$, comprobándose que $(14 \times 45) \bmod 100 = 30$ y $(14 \times 95) \bmod 100 = 30$.
+\end{itemize}
+
+\subsection{Ejercicio resuelto 3: Exponenciación modular binaria instrumentada}
+Se instrumenta el conteo de cuadrados y productos seleccionados:
+
+\begin{lstlisting}[language=Python, caption={Exponenciación modular binaria instrumentada}, label={lst:resuelto_3}]
+def modular_pow(base, exponent, modulus):
+    if modulus <= 0: raise ValueError("El modulo debe ser positivo")
+    if exponent < 0: raise ValueError("El exponente debe ser no negativo")
+    result, base = 1 % modulus, base % modulus
+    squares, selected_products = 0, 0
+    while exponent > 0:
+        if exponent & 1:
+            result = (result * base) % modulus
+            selected_products += 1
+        exponent >>= 1
+        if exponent > 0:
+            base = (base * base) % modulus
+            squares += 1
+    return result, squares, selected_products
+\end{lstlisting}
+
+\textbf{Validación con $7^{13} \bmod 20$:}
+La ejecución arroja $\text{valor} = 7$, $\text{cuadrados} = 3$ y $\text{productos} = 3$, coincidiendo con \texttt{pow(7, 13, 20)}. Como $13 = (1101)_2$, el exponente tiene longitud $k = 4$ bits y 3 bits en 1; se generan $k-1 = 3$ cuadrados ($a^2, a^4, a^8$) y 3 productos sobre el acumulador ($a, a^4, a^8$), requiriendo 6 operaciones modulares frente a las $13 - 1 = 12$ del método directo.
