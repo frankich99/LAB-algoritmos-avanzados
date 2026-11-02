@@ -1,0 +1,10 @@
+parametro,valor,descripcion
+semilla_generacion,20260701,Semilla para 210 probables primos
+semilla_comparacion,20260702,Semilla para 112 entradas y 20 bases
+semilla_tasa_error,20260703,Semilla para simulación de errores
+tamanios_bits,"16, 32, 64, 128, 256, 512, 1024",Longitudes evaluadas
+total_primos_generados,210,30 primos por cada tamaño
+repeticiones_por_medicion,7,Repeticiones para cálculo de mediana
+simulaciones_tasa_error,3000,Muestreos Monte Carlo por caso
+csvs_generados,10,Total de datasets CSV auditables
+figuras_png,4,Total de gráficos de alta resolución
