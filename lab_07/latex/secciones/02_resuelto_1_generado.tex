@@ -1,0 +1,15 @@
+\begin{lstlisting}[language=Python,caption={División de prueba y Fermat: código ejecutable}]
+def resuelto_1():
+    """División de prueba y contraejemplo al recíproco de Fermat."""
+    division_221 = trial_division(221)
+    fermat_15 = fermat_round(15, 2)
+    fermat_341 = fermat_round(341, 2)
+    assert division_221 is False and fermat_15 is False and fermat_341 is True
+    return {"221_es_primo": division_221, "15_pasa_fermat": fermat_15,
+            "341_pasa_fermat": fermat_341}
+\end{lstlisting}
+\noindent\textbf{Resultado de la ejecución:}
+\begin{lstlisting}[style=consolestyle]
+>>> resuelto_1()
+{'221_es_primo': False, '15_pasa_fermat': False, '341_pasa_fermat': True}
+\end{lstlisting}
