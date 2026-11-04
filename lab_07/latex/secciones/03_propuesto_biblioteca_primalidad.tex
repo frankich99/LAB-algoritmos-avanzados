@@ -1,0 +1,29 @@
+% !TEX root = ../main.tex
+\section{Ejercicio propuesto 1: biblioteca de primalidad}
+
+\subsection{Interfaz y criterio de decisión}
+La biblioteca \path{python/primality.py} reúne las siete funciones pedidas. Su contrato distingue una prueba concluyente de composición de una aceptación provisional:
+\begin{table}[H]\centering\small
+\caption{Interfaz pública organizada por función}\label{tab:interfaz}
+\begin{tabularx}{\textwidth}{@{}p{.16\textwidth}>{\raggedright\arraybackslash}p{.42\textwidth}X@{}}\toprule
+Etapa & Funciones & Resultado principal \\ \midrule
+Prueba exacta & \texttt{trial\_division} & Decisión determinista hasta $\lfloor\sqrt n\rfloor$; $n<2$ no es primo. \\
+Rondas & \texttt{fermat\_round}\newline\texttt{decompose}\newline\texttt{miller\_rabin\_round} & Base válida $2\le a\le n-2$; $n-1=2^sd$. La ronda de Miller--Rabin devuelve decisión y detalle: $n,a,s,d$, residuos y contadores. \\
+Decisión & \texttt{is\_probable\_prime} & Precribado seguido de rondas; aceptar significa \emph{probable primo}. \\
+Generación & \texttt{generate\_candidate}, \texttt{generate\_probable\_prime} & Entero impar de longitud exacta; muestreo hasta superar el precribado y las rondas. \\ \bottomrule
+\end{tabularx}\end{table}
+
+Se comprueban tipos, bases y descomposiciones antes de operar. El precribado usa primos hasta $997$: certifica al candidato que coincide con uno de ellos y descarta sus múltiplos. La exponenciación binaria registra los cuadrados \emph{efectivamente realizados}; no atribuye a \texttt{pow()} un conteo interno.
+
+\subsection{Casos y trazas: qué demuestra cada salida}
+La Tabla \ref{tab:casos_propuesto1} procede de \path{python/results/casos_conocidos.csv}. ``Sí'' en Fermat o Miller--Rabin indica que \emph{pasa la base 2}; para $n<5$ la ronda no aplica. Los cuatro compuestos que pasan Fermat en la tabla son rechazados por Miller--Rabin con esa misma base.
+\input{secciones/03_casos_generados.tex}
+
+\input{secciones/03_trazas_generadas.tex}
+
+En las trazas de la Tabla \ref{tab:trazas_propuesto1}, generadas desde \path{python/results/trazas_miller_rabin.csv}, $221$ no alcanza $-1$; $341$ y $561$ alcanzan $1$ desde una raíz no trivial. Las tres rondas aportan \emph{testigos de composición}.
+
+\subsection{Validación y alcance}
+Las \textbf{32 pruebas} de \path{python/test_primality.py} cubren extremos, cuadrados de primos y bases inválidas; comparan $10\,001$ enteros con una criba independiente y $1000$ aleatorios menores que $10^6$ con división de prueba. Además, \texttt{classify\_bases} separa testigos y mentirosos fuertes para todas las bases válidas de los compuestos impares $5\le n<200$ y de $221$, $341$ y $561$. Los candidatos de $16$ a $1024$ bits conservan longitud e imparidad.
+
+\texttt{primality\_report} conserva bases, rondas y operaciones para auditar la decisión. Un testigo certifica composición; si un compuesto impar supera $r$ bases \emph{uniformes e independientes}, la probabilidad de aceptarlo no excede $4^{-r}$. La semilla fija solo reproduce ensayos: sin \texttt{rng} se usa \texttt{secrets.SystemRandom}, que sí es la fuente prevista para generación segura.
