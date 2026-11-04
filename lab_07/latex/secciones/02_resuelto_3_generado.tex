@@ -1,0 +1,24 @@
+\begin{lstlisting}[language=Python,caption={Prueba repetida y candidatos: código ejecutable}]
+def resuelto_3():
+    """Candidato reproducible y cinco rondas sobre el primo conocido 1009."""
+    rng = Random(2026)
+    n = generate_candidate(32, rng)
+    assert n.bit_length() == 32 and n % 2 == 1
+    report = primality_report(1009, rounds=5, rng=Random(2026))
+    assert report["resultado"] == "probable_primo"
+    assert report["rondas_ejecutadas"] == 5 and report["cota_error"] == 4.0**-5
+    return {"candidato": n, "bits": n.bit_length(), "impar": bool(n % 2),
+            "1009_resultado": report["resultado"],
+            "rondas_ejecutadas": report["rondas_ejecutadas"],
+            "cota_error": report["cota_error"]}
+\end{lstlisting}
+\noindent\textbf{Resultado de la ejecución:}
+\begin{lstlisting}[style=consolestyle]
+>>> resuelto_3()
+{'candidato': 2659099673,
+ 'bits': 32,
+ 'impar': True,
+ '1009_resultado': 'probable_primo',
+ 'rondas_ejecutadas': 5,
+ 'cota_error': 0.0009765625}
+\end{lstlisting}
