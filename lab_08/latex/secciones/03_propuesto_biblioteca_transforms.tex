@@ -1,0 +1,81 @@
+% !TEX root = ../main.tex
+\section{Ejercicio propuesto 1: biblioteca modular de transformadas}
+
+\subsection{Arquitectura y diseño de \texttt{transforms.py}}
+Diseñamos el módulo \path{python/transforms.py} para centralizar las operaciones de convolución discreta, análisis espectral rápido y transformadas en campos finitos. En nuestro diseño aplicamos los siguientes criterios de ingeniería:
+\begin{enumerate}
+    \item \textbf{Inmutabilidad y funciones puras:} Salvo la función interna \texttt{fft\_iterative} (diseñada in-place para minimizar el uso de memoria), todas las funciones públicas reciben secuencias inmutables o generan copias independientes, garantizando la ausencia de efectos colaterales.
+    \item \textbf{Contratos estrictos y precondiciones:} Validamos las condiciones algebraicas de validez mediante excepciones estándar (\texttt{ValueError}, \texttt{TypeError}, \texttt{ArithmeticError}):
+    \begin{itemize}
+        \item Longitud potencia de dos positiva: $N > 0$ y $(N \ \& \ (N - 1)) == 0$.
+        \item Módulo primo $p$ verificado mediante criba determinista hasta $\lfloor\sqrt{p}\rfloor$.
+        \item Divisibilidad de Lagrange: $(p - 1) \bmod N == 0$.
+        \item Raíz de orden exacto $N$: $\omega^N \equiv 1 \pmod p$ y $\omega^{N/2} \not\equiv 1 \pmod p$ para $N > 1$.
+        \item Generador de $\mathbb{F}_p^*$: $g^{(p-1)/q} \not\equiv 1 \pmod p$ para todo factor primo $q$ de $p-1$.
+    \end{itemize}
+    \item \textbf{Instrumentación desacoplada:} Diseñamos la clase \texttt{OperationCounts} para auditar el número real de mariposas, multiplicaciones, adiciones y etapas ejecutadas sin degradar los tiempos de CPU en los benchmarks.
+\end{enumerate}
+
+\subsection{Estructura de la mariposa y conteo de operaciones}
+Cada mariposa radix-2 recibe los valores $u = E_k$ y $v = O_k$, junto con el factor de giro $\omega$. Calcula $t = \omega \cdot v$ y produce el par $(u + t, u - t)$. En nuestra instrumentación contabilizamos:
+\begin{itemize}
+    \item \textbf{2 multiplicaciones}: el producto $t = \omega \cdot v$ y el avance del factor de giro $\omega \leftarrow \omega \cdot \omega_N$.
+    \item \textbf{2 adiciones/sustracciones}: $u + t$ y $u - t$.
+    \item El producto punto a punto en frecuencia añade $N$ multiplicaciones.
+    \item La normalización de la transformada inversa añade $N$ multiplicaciones por $1/N$ (o $N^{-1} \bmod p$).
+\end{itemize}
+
+\subsection{Implementaciones de FFT: recursiva frente a iterativa \emph{in-place}}
+La versión recursiva expresa la descomposición divide y vencerás de forma directa mediante rebanado (\emph{slicing} \texttt{a[::2]} y \texttt{a[1::2]}). Aunque matemáticamente intuitiva, comprobamos que genera $\Theta(N)$ objetos intermedios y sobrecarga el recolector de basura de Python.
+
+Por el contrario, nuestra versión iterativa realiza inicialmente el reordenamiento por \emph{inversión de bits} (\texttt{\_bit\_reverse}) en tiempo $\Theta(N)$ y espacio auxiliar $\Theta(1)$, ubicando los coeficientes directamente en la posición de las hojas del árbol. A continuación, procesa $\log_2 N$ etapas incrementando el tamaño del bloque $S = 2, 4, 8, \dots, N$.
+\begin{lstlisting}[language=Python,caption={Implementación iterativa in-place con inversión de bits}]
+def fft_iterative(values, *, invert=False, stats=None):
+    n = len(values)
+    _check_length(n)
+    _bit_reverse(values)
+    size = 2
+    while size <= n:
+        root = exp((-2j if invert else 2j) * pi / size)
+        for start in range(0, n, size):
+            w = 1 + 0j
+            for k in range(size // 2):
+                u = values[start + k]
+                t = w * values[start + k + size // 2]
+                values[start + k] = u + t
+                values[start + k + size // 2] = u - t
+                w *= root
+                _butterfly(stats)
+        if stats is not None:
+            stats.stages += 1
+        size <<= 1
+    if invert:
+        for i in range(n):
+            values[i] /= n
+    return values
+\end{lstlisting}
+
+\subsection{Multiplicación por FFT con control estricto de error}
+Para multiplicar polinomios enteros mediante FFT compleja, nuestra función \texttt{multiply\_fft} realiza la convolución continua (\texttt{convolution\_fft\_raw}), examina cada coeficiente complejo resultante $\tilde{c}_k$ y comprueba:
+\begin{equation}
+|\operatorname{Im}(\tilde{c}_k)| \le \varepsilon_{\text{tol}} \quad \text{y} \quad |\operatorname{Re}(\tilde{c}_k) - \operatorname{round}(\operatorname{Re}(\tilde{c}_k))| \le \varepsilon_{\text{tol}}.
+\end{equation}
+Si alguna componente excede la tolerancia $\varepsilon_{\text{tol}} = 10^{-7}$, aborta con \texttt{ArithmeticError}, evitando silenciosamente la corrupción del resultado entero por errores de punto flotante.
+
+\subsection{Transformada Teórica de Números y verificación de raíces}
+La función \texttt{ntt} aplica la mariposa directamente en aritmética modular. Mediante la función \texttt{validate\_root} auditamos formalmente que la raíz suministrada posea orden multiplicativo exactamente $N$:
+\begin{lstlisting}[language=Python,caption={Verificación de raíz de orden exacto N en Fp}]
+def validate_root(root, length, modulus):
+    _check_length(length)
+    if not _prime(modulus):
+        raise ValueError("El modulo debe ser primo")
+    if (modulus - 1) % length:
+        raise ValueError("N debe dividir p-1")
+    root %= modulus
+    if pow(root, length, modulus) != 1 or (
+        length > 1 and pow(root, length // 2, modulus) == 1
+    ):
+        raise ValueError("La raiz no tiene orden exacto N")
+    return True
+\end{lstlisting}
+Nuestra función \texttt{multiply\_ntt} valida que el módulo admita la longitud requerida $N = 2^{\lceil \log_2(m+n-1) \rceil}$, obtiene la raíz $\omega = g^{(p-1)/N} \bmod p$, transforma ambas secuencias, multiplica punto a punto módulo $p$ y aplica la INTT con $g^{-(p-1)/N} \bmod p$ y factor de escala $N^{-1} \bmod p$.

@@ -1,0 +1,76 @@
+% !TEX root = ../main.tex
+\section{Trabajo preparatorio y marco teórico}
+
+\subsection{Convolución y multiplicación de polinomios}
+Un polinomio en una indeterminada $x$ con coeficientes en un anillo o campo $\mathbb{K}$ se representa formalmente mediante un vector unidimensional en orden de grado ascendente:
+\begin{equation}
+A(x) = \sum_{i=0}^{m-1} a_i x^i, \qquad B(x) = \sum_{j=0}^{n-1} b_j x^j.
+\end{equation}
+El producto algebraico $C(x) = A(x)B(x)$ tiene grado a lo sumo $(m-1) + (n-1) = m+n-2$, por lo que requiere exactamente $m+n-1$ coeficientes $c_k$:
+\begin{equation}
+c_k = \sum_{\substack{i+j=k \\ 0 \le i < m \\ 0 \le j < n}} a_i b_j, \qquad k \in \{0, 1, \dots, m+n-2\}.
+\end{equation}
+Esta operación algebraica coincide con la \emph{convolución lineal discreta} de los vectores de coeficientes $\mathbf{a}$ y $\mathbf{b}$. La implementación mediante doble bucle anidado (\emph{convolución directa}) calcula todos los pares $(a_i, b_j)$, requiriendo exactamente $mn$ multiplicaciones y $(m-1)(n-1)$ sumas, lo que establece una cota de complejidad temporal asintótica $\Theta(mn)$. Cuando $m \approx n$, este costo cuadrático $\Theta(n^2)$ se vuelve prohibitivo para polinomios de alto grado.
+
+\subsection{Transformada Discreta de Fourier y el algoritmo Cooley--Tukey}
+El teorema de interpolación garantiza que un polinomio de grado menor que $N$ queda unívocamente determinado por sus valores en $N$ puntos distintos. Si evaluamos $A(x)$ en las $N$ raíces $N$-ésimas complejas de la unidad:
+\begin{equation}
+\omega_N = e^{2\pi i / N} = \cos\left(\frac{2\pi}{N}\right) + i\sin\left(\frac{2\pi}{N}\right),
+\end{equation}
+obtenemos la Transformada Discreta de Fourier (DFT):
+\begin{equation}
+A_k = \sum_{j=0}^{N-1} a_j \omega_N^{j k}, \qquad k \in \{0, 1, \dots, N-1\}.
+\end{equation}
+La evaluación directa de la DFT requiere $\Theta(N^2)$ operaciones. El algoritmo de Cooley--Tukey (radix-2, decimation-in-time) aprovecha las propiedades algebraicas de simetría y periodicidad de las raíces:
+\begin{align}
+\omega_N^{2k} &= \omega_{N/2}^k \quad \text{(lema de cancelación)}, \\
+\omega_N^{k + N/2} &= -\omega_N^k \quad \text{(lema del signo opuesto)}.
+\end{align}
+Separando los coeficientes en índices pares e impares:
+\begin{equation}
+A(x) = A_{\text{par}}(x^2) + x A_{\text{impar}}(x^2),
+\end{equation}
+se reduce la evaluación de tamaño $N$ a dos subproblemas de tamaño $N/2$:
+\begin{align}
+A_k &= A_{\text{par}}(\omega_{N/2}^k) + \omega_N^k A_{\text{impar}}(\omega_{N/2}^k) = E_k + \omega_N^k O_k, \\
+A_{k+N/2} &= A_{\text{par}}(\omega_{N/2}^k) - \omega_N^k A_{\text{impar}}(\omega_{N/2}^k) = E_k - \omega_N^k O_k.
+\end{align}
+Cada combinación $(E_k, O_k) \to (A_k, A_{k+N/2})$ constituye una \emph{mariposa radix-2}. La recurrencia de tiempo es:
+\begin{equation}
+T(N) = 2T(N/2) + \Theta(N) \implies T(N) = \Theta(N \log_2 N).
+\end{equation}
+La Transformada Inversa (IDFT / IFFT) interpola los valores espectrales hacia coeficientes evaluando sobre $\omega_N^{-1} = \overline{\omega_N}$ y normalizando por el factor $1/N$:
+\begin{equation}
+a_j = \frac{1}{N} \sum_{k=0}^{N-1} A_k \omega_N^{-j k} = \frac{1}{N} \overline{\operatorname{DFT}(\overline{\mathbf{A}})}_j.
+\end{equation}
+
+\subsection{Convolución circular, convolución lineal y zero padding}
+El producto punto a punto en el dominio frecuencial $\mathbf{C}_{\text{freq}} = \operatorname{DFT}(\mathbf{a}) \odot \operatorname{DFT}(\mathbf{b})$ corresponde en el dominio temporal a la \emph{convolución circular} módulo el binomio $x^N - 1$:
+\begin{equation}
+c_k^{\text{circ}} = \sum_{j=0}^{N-1} a_j b_{(k - j) \bmod N} = \sum_{r \ge 0} c_{k + rN}^{\text{lineal}}.
+\end{equation}
+Para que la convolución circular coincida con la convolución lineal (sin plegamiento ni contaminación de términos de grado superior sobre grados inferiores), se debe garantizar que ningún grado lineal exceda $N - 1$. Como el producto lineal tiene longitud $m+n-1$, la longitud de la transformada debe satisfacer:
+\begin{equation}
+N \ge m + n - 1.
+\end{equation}
+Para aplicar el esquema radix-2, se elige la potencia de dos mínima:
+\begin{equation}
+N = 2^{\lceil \log_2(m+n-1) \rceil},
+\end{equation}
+y se rellenan ambos vectores con ceros a la derecha (\emph{zero padding}).
+
+\subsection{Transformada Teórica de Números (NTT sobre campos finitos)}
+En cálculo con enteros de gran magnitud, la FFT compleja sufre de errores de redondeo debido a la precisión finita de la mantisa IEEE 754 (53 bits en doble precisión). Para eliminar completamente el error numérico, la Transformada Teórica de Números (NTT) reemplaza el cuerpo de los números complejos $\mathbb{C}$ por un campo primo finito $\mathbb{F}_p = \mathbb{Z}/p\mathbb{Z}$.
+\begin{enumerate}
+    \item \textbf{Condición de existencia:} Por el teorema de Lagrange, el orden multiplicativo de cualquier elemento en el grupo multiplicativo $\mathbb{F}_p^*$ divide su orden $p-1$. Por lo tanto, para que exista un elemento $\omega$ de orden exacto $N$, es condición necesaria y suficiente que:
+    \begin{equation}
+    N \mid (p - 1).
+    \end{equation}
+    \item \textbf{Cálculo de la raíz principal:} Si $g$ es un generador (raíz primitiva) de $\mathbb{F}_p^*$, la raíz de orden exacto $N$ se obtiene como:
+    \begin{equation}
+    \omega \equiv g^{(p-1)/N} \pmod p.
+    \end{equation}
+    Se verifica que $\omega^N \equiv 1 \pmod p$ y $\omega^{N/2} \not\equiv 1 \pmod p$ para $N > 1$.
+    \item \textbf{Primos NTT estándar:} Se eligen primos de Proth de la forma $p = c \cdot 2^k + 1$. En este laboratorio se emplea el primo criptográfico y de álgebra computacional $p = 998244353 = 119 \cdot 2^{23} + 1$, el cual admite transformadas de longitud hasta $N_{\max} = 2^{23} = 8\,388\,608$ con generador canónico $g = 3$. Para trazas manuales se utiliza el campo pequeño $\mathbb{F}_{17}$ ($17 - 1 = 2^4 \implies N \le 16$).
+    \item \textbf{Exactitud modular frente a coeficientes enteros:} La NTT recupera exactamente los residuos $c_k \bmod p$. Para recuperar coeficientes enteros $c_k \in \mathbb{Z}$ con cotas de magnitud $|c_k| \le M$, se requiere que el módulo satisfaga $p > 2M$ (empleando representación simétrica o centrada en $(-p/2, p/2]$), o bien calcular la convolución sobre múltiples primos NTT independientes y reconstruir el valor entero mediante el Teorema Chino del Resto (CRT).
+\end{enumerate}

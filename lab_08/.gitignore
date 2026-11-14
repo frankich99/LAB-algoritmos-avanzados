@@ -1,0 +1,12 @@
+__pycache__/
+.ruff_cache/
+*.py[cod]
+latex/*.aux
+latex/*.log
+latex/*.toc
+latex/*.out
+latex/compilacion.log
+latex_github/*.aux
+latex_github/*.log
+latex_github/*.toc
+latex_github/*.out
