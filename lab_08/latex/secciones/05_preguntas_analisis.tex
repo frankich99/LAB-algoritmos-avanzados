@@ -1,0 +1,46 @@
+% !TEX root = ../main.tex
+\section{Preguntas de análisis}
+
+En esta sección respondemos de forma puntual las doce preguntas de análisis planteadas en la sección 12 de la guía, sustentadas en el álgebra de polinomios y en las mediciones obtenidas por nuestro grupo de trabajo:
+
+\begin{enumerate}
+    \item \textbf{¿Por qué la multiplicación de polinomios es una convolución?}\\
+    Al multiplicar $A(x) = \sum_{i=0}^{m-1} a_i x^i$ y $B(x) = \sum_{j=0}^{n-1} b_j x^j$, cada potencia $x^k$ agrupa la suma de todos los productos cruzados donde la suma de índices satisface $i+j=k$:
+    \begin{equation}
+    c_k = \sum_{\substack{i+j=k \\ 0 \le i < m \\ 0 \le j < n}} a_i b_j.
+    \end{equation}
+    Esta expresión coincide de manera idéntica con la definición de la convolución lineal discreta $(\mathbf{a} * \mathbf{b})_k$.
+
+    \item \textbf{¿Por qué se requieren $m+n-1$ posiciones?}\\
+    El grado máximo del producto $A(x)B(x)$ es $(m-1) + (n-1) = m+n-2$. Un polinomio de grado $d$ tiene exactamente $d+1$ coeficientes (desde el término independiente $x^0$ hasta $x^d$). Por tanto, se requieren $(m+n-2) + 1 = m+n-1$ posiciones para registrar todos los coeficientes sin truncar el resultado.
+
+    \item \textbf{¿Qué diferencia existe entre convolución lineal y circular?}\\
+    La convolución lineal conserva cada grado de manera independiente en $\mathbb{K}[x]$. La convolución circular de tamaño $N$ calcula coeficientes en el anillo cociente $\mathbb{K}[x] / \langle x^N - 1 \rangle$, provocando que cualquier término de grado $k \ge N$ se pliegue sobre $k \bmod N$ ($c_k^{\text{circ}} = \sum_{r} c_{k+rN}^{\text{lineal}}$). Para evitar este solapamiento (aliasing) y hacerlas coincidir, aplicamos zero padding hasta que $N \ge m+n-1$.
+
+    \item \textbf{¿Qué propiedad de las raíces permite dividir el problema en pares e impares?}\\
+    Se fundamenta en dos propiedades: el lema de cancelación ($\omega_N^{2k} = \omega_{N/2}^k$) y el lema del signo opuesto ($\omega_N^{k+N/2} = -\omega_N^k$). Al separar $A(x) = A_{\text{par}}(x^2) + x A_{\text{impar}}(x^2)$, las evaluaciones $E_k$ y $O_k$ de tamaño $N/2$ se combinan como $E_k + \omega^k O_k$ para la primera mitad y se reutilizan para la segunda mitad invirtiendo únicamente el signo: $E_k - \omega^k O_k$.
+
+    \item \textbf{¿Qué trabajo realiza una mariposa?}\\
+    Combina dos evaluaciones de subproblemas ($u = E_k$ y $v = O_k$) mediante un factor de giro $\omega$: calcula el producto $t = \omega \cdot v$, la suma $u + t$ y la resta $u - t$. En nuestro conteo de operaciones, cada mariposa realiza exactamente 2 multiplicaciones (giro y avance de raíz) y 2 adiciones/sustracciones.
+
+    \item \textbf{¿Por qué la FFT es $\Theta(N\log N)$?}\\
+    Divide un problema de tamaño $N$ en 2 subproblemas de tamaño $N/2$ y los recombina mediante $N/2$ mariposas ($\Theta(N)$ operaciones). La ecuación de recurrencia $T(N) = 2T(N/2) + \Theta(N)$ corresponde al caso 2 del Teorema Maestro ($a=2, b=2$), resultando en $T(N) = \Theta(N \log_2 N)$ a lo largo de sus $\log_2 N$ etapas.
+
+    \item \textbf{¿Qué diferencias prácticas aparecen entre FFT recursiva e iterativa?}\\
+    La versión recursiva genera $O(N)$ marcos en el call stack y crea múltiples sublistas por rebanado (slicing), aumentando el consumo de memoria y la sobrecarga del recolector de basura de Python. La iterativa aplica reordenamiento por inversión de bits (\emph{bit-reversal}) al inicio y opera in-place con bucles contiguos, mejorando la localidad espacial de caché y reduciendo el tiempo de CPU en nuestras pruebas.
+
+    \item \textbf{¿Cuándo aparecen errores de redondeo relevantes?}\\
+    Aparecen cuando los coeficientes del producto intermedio superan los 53 bits de mantisa del formato IEEE 754 de doble precisión ($2^{53} \approx 9 \times 10^{15}$). Para magnitudes moderadas ($\le 10^5$), el error numérico es menor a $10^{-2}$ y el redondeo entero es exacto. Con magnitudes de $10^9$ o en el rango $[0, p-1]$, el error supera $0.5$ e invalida la reconstrucción del entero original.
+
+    \item \textbf{¿Por qué una NTT necesita que $N \mid (p-1)$?}\\
+    En el campo finito $\mathbb{F}_p$, el grupo multiplicativo $\mathbb{F}_p^*$ tiene orden $p-1$. Por el Teorema de Lagrange, el orden de cualquier elemento divide al orden del grupo. Por lo tanto, para que exista un elemento $\omega$ de orden multiplicativo exacto $N$ ($\omega^N \equiv 1 \pmod p$ y $\omega^k \not\equiv 1$ para $k < N$), es condición matemática necesaria que $N$ sea divisor de $p-1$.
+
+    \item \textbf{¿Qué diferencia existe entre exactitud modular y exactitud entera?}\\
+    La exactitud modular garantiza que cada coeficiente es exactamente congruente a $c_k \bmod p$ sin ningún error numérico. La exactitud entera requiere recuperar el valor exacto en $\mathbb{Z}$, lo cual exige que el módulo acote el rango real ($p > 2M$ para $|c_k| \le M$ con representación centrada) o aplicar el Teorema Chino del Resto (CRT) sobre múltiples primos NTT.
+
+    \item \textbf{¿Cuándo conviene FFT compleja y cuándo NTT?}\\
+    La FFT compleja conviene en procesamiento digital de señales (DSP), audio e imágenes donde las señales son continuas o reales y toleran aproximaciones numéricas. La NTT es indispensable en álgebra computacional exacta, teoría de números y criptografía de clave pública (retículos como Kyber y Dilithium), donde cualquier error de punto flotante compromete la seguridad o invalida la prueba.
+
+    \item \textbf{¿Por qué una mejor complejidad asintótica puede no ser más rápida para tamaños pequeños?}\\
+    La notación asintótica ignora las constantes multiplicativas y aditivas ($T(n) = c \cdot f(n) + k$). La convolución directa tiene una constante muy baja al constar de bucles contiguos simples. La FFT y NTT arrastran la sobrecarga de zero padding, raíces complejas o modulares y tres transformadas. En nuestras mediciones, la directa fue más veloz para $n \le 64$, manifestándose el punto de cruce en $n = 128$.
+\end{enumerate}
