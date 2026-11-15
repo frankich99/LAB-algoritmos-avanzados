@@ -1,0 +1,4 @@
+metodo,primer_n_supera_directa,ultimo_n_directa_medido,criterio
+fft_recursiva,128,2048,mediana_ns menor que directa en el mismo n
+fft_iterativa,128,2048,mediana_ns menor que directa en el mismo n
+ntt,128,2048,mediana_ns menor que directa en el mismo n

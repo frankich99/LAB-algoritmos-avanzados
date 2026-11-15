@@ -1,0 +1,53 @@
+% !TEX root = ../main.tex
+\section{Ejercicio propuesto 2: pruebas diferenciales y análisis experimental}
+
+\subsection{Metodología de medición y diseño experimental}
+Para evaluar la convolución directa, la FFT compleja (recursiva e iterativa) y la NTT modular, implementamos el siguiente protocolo de medición experimental:
+\begin{enumerate}
+    \item \textbf{Aislamiento temporal estricto:} Pregeneramos todas las entradas en memoria antes de activar el cronómetro de alta resolución \texttt{perf\_counter\_ns()}. La ventana de medición contiene exclusivamente el algoritmo de multiplicación; excluimos la generación de datos, la validación con oráculos, el conteo de operaciones y las operaciones de entrada/salida a disco.
+    \item \textbf{Repeticiones y estadística:} Ejecutamos cada combinación de tamaño y método un mínimo de 10 repeticiones independientes. Calculamos el tiempo mínimo, la mediana y el máximo, adoptando la mediana como métrica central por su robustez frente al planificador del sistema operativo.
+    \item \textbf{Gestión de memoria y mutabilidad:} Dado que \texttt{fft\_iterative} opera in-place, generamos una copia limpia de los vectores en cada repetición para evitar mediciones sobre arreglos previamente alterados.
+    \item \textbf{Rango evaluado:} Medimos potencias de dos $n = 2^k$ con $k \in \{3, 4, \dots, 14\}$ ($8 \le n \le 16\,384$). La convolución directa la evaluamos hasta $n = 2048$ para evitar tiempos prohibitivos de ejecución.
+\end{enumerate}
+
+\subsection{Escenario A: Validación diferencial y oráculos de referencia}
+Contrastamos la corrección de las cuatro rutas algorítmicas frente a los oráculos exactos sobre tres rangos de coeficientes: pequeños ($[-10, 10]$), medianos ($[-1000, 1000]$) y de gran magnitud ($[0, p-1]$ con $p = 998244353$). La Tabla \ref{tab:manuales} resume los casos manuales y de frontera.
+
+Las Tablas \ref{tab:validacion_fft} y \ref{tab:validacion_ntt} demuestran la fidelidad de la transformación y recuperación directa/inversa (roundtrip). La NTT en $\mathbb{F}_p$ recuperó con exactitud absoluta los vectores de prueba módulo $p$. Por su parte, la FFT de doble precisión exhibió diferencias del orden de $10^{-15}$ a $10^{-14}$ frente a la referencia entera en rangos acotados, coincidiendo de forma idéntica en sus versiones recursiva e iterativa. La Tabla \ref{tab:modulos_raices} documenta la correspondencia de raíces y generadores según la divisibilidad $N \mid (p-1)$.
+
+\input{secciones/04_tablas_generadas}
+
+\subsection{Escenario B: Complejidad temporal, operaciones y puntos de cruce}
+La Tabla \ref{tab:tiempos} y la Figura \ref{fig:tiempo} ilustran la evolución del costo temporal empírico en función del tamaño de entrada $n$. Confirmamos la transición asintótica: la convolución directa crece a una tasa cuadrática $\Theta(n^2)$, requiriendo más de un segundo para $n = 2048$, mientras que FFT recursiva, FFT iterativa y NTT exhiben un crecimiento cuasilineal $\Theta(n \log_2 n)$.
+
+\begin{figure}[H]\centering
+\includegraphics[width=.88\textwidth]{fig1_tiempo_vs_n.png}
+\caption{Tiempo mediano de ejecución (ms) frente al tamaño del polinomio $n$ en escala logarítmica. La convolución directa se interrumpe en $n=2048$ por costo cuadrático.}\label{fig:tiempo}
+\end{figure}
+
+\begin{figure}[H]\centering
+\includegraphics[width=.88\textwidth]{fig2_operaciones_vs_n.png}
+\caption{Número de operaciones fundamentales ejecutadas frente a $n$: multiplicaciones escalares directas frente a mariposas radix-2 de FFT y NTT.}\label{fig:operaciones}
+\end{figure}
+
+En la Figura \ref{fig:operaciones} contrastamos el número real de mariposas ejecutadas por las transformadas rápidas ($3 \cdot \frac{N}{2} \log_2 N$) frente a las $n^2$ multiplicaciones de la convolución directa:
+\begin{itemize}
+    \item Para tamaños pequeños ($n \le 64$), la convolución directa es superior en tiempo de reloj real. Aunque su orden asintótico es $\Theta(n^2)$, su constante oculta es mínima: se reduce a bucles nativos sin inicialización de listas auxiliares ni cálculos trigonométricos.
+    \item El \textbf{punto de cruce} (crossover point) ocurre a partir de $n = 128$, tamaño en el cual tanto la FFT iterativa (2.017 ms frente a 2.834 ms directa) como la FFT recursiva (2.582 ms) y la NTT (2.550 ms) superan a la convolución tradicional. Para $n = 2048$, las transformadas rápidas son más de 16 veces más veloces que la convolución directa.
+    \item Entre FFT iterativa y recursiva, la versión iterativa ofrece una ventaja de tiempo en tamaños pequeños y medianos ($n \le 2048$) al evitar las llamadas recursivas y la asignación de memoria dinámica de Python.
+\end{itemize}
+
+\subsection{Escenario C: Precisión numérica, error de redondeo y primer fallo}
+La Tabla \ref{tab:error} y la Figura \ref{fig:error} presentan el error absoluto máximo de la parte real $\max |\operatorname{Re}(\tilde{c}_k) - c_k|$ y de la parte imaginaria $\max |\operatorname{Im}(\tilde{c}_k)|$ antes del redondeo entero.
+
+\begin{figure}[H]\centering
+\includegraphics[width=.88\textwidth]{fig3_error_fft_vs_n.png}
+\caption{Error real máximo antes del redondeo frente al tamaño $n$ para coeficientes pequeños ($[-10,10]$) y medianos ($[-1000,1000]$).}\label{fig:error}
+\end{figure}
+
+Nuestros resultados confirman que el error de punto flotante en la FFT crece de forma acotada con el tamaño $n$ y de forma proporcional al producto de las magnitudes de los coeficientes:
+\begin{itemize}
+    \item Para magnitudes moderadas ($\le 10^5$), el error numérico permanece estrictamente por debajo de $0.005$, garantizando un redondeo exacto al entero más cercano con cero coeficientes erróneos.
+    \item Cuando los coeficientes alcanzan $10^9$ o el rango del residuo $[0, p-1]$, los coeficientes del producto exceden la capacidad de la mantisa de 53 bits del estándar IEEE 754 ($2^{53} \approx 9 \times 10^{15}$). Al superarse este umbral, los errores de redondeo se propagan a valores enteros ($\approx 4.6 \times 10^5$), generando discrepancias frente a la referencia entera.
+    \item En contraste, la NTT no experimenta ninguna degradación numérica: todos los cálculos en $\mathbb{F}_p$ son rigurosamente exactos módulo $p$, consolidándose como el algoritmo idóneo para álgebra computacional de alta precisión.
+\end{itemize}
