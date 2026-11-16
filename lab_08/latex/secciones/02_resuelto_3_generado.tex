@@ -1,0 +1,18 @@
+\begin{lstlisting}[language=Python,caption={Ejercicio resuelto 3: NTT e INTT directa en F17}]
+def resuelto_3():
+    a = [1, 2, 3, 4]
+    transformed = ntt_direct(a, 4, 17)
+    recovered = intt_direct(transformed, 4, 17)
+    assert transformed == [10, 7, 15, 6] and recovered == a
+    return {"entrada": a, "raiz": 4, "modulo": 17,
+            "ntt": transformed, "intt": recovered}
+\end{lstlisting}
+\noindent\textbf{Resultado de la ejecución:}
+\begin{lstlisting}[style=consolestyle]
+>>> resuelto_3()
+{'entrada': [1, 2, 3, 4],
+ 'raiz': 4,
+ 'modulo': 17,
+ 'ntt': [10, 7, 15, 6],
+ 'intt': [1, 2, 3, 4]}
+\end{lstlisting}

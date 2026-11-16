@@ -1,0 +1,12 @@
+\begin{lstlisting}[language=Python,caption={Ejercicio resuelto 1: convolución directa}]
+def resuelto_1():
+    a, b = [1, 2, 3], [4, 5]
+    result = naive_convolution(a, b)
+    assert result == [4, 13, 22, 15]
+    return {"a": a, "b": b, "c": result}
+\end{lstlisting}
+\noindent\textbf{Resultado de la ejecución:}
+\begin{lstlisting}[style=consolestyle]
+>>> resuelto_1()
+{'a': [1, 2, 3], 'b': [4, 5], 'c': [4, 13, 22, 15]}
+\end{lstlisting}
