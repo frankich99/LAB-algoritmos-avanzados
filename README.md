@@ -50,6 +50,8 @@ Cada laboratorio incluye:
 | **Lab 04** | Montículos de Fibonacci y Análisis Amortizado | Montículo de Fibonacci con punteros circulares, consolidación por grados, cortes en cascada, `heapq` perezoso y Dijkstra | Potencial: $\Phi(H) = t(H) + 2m(H)$<br>`insert`: $O(1)$, `decrease-key`: $O(1)$, `extract-min`: $O(\log n)$<br>Dijkstra: $O(|E| + |V|\log |V|)$ |
 | **Lab 05** | Splay Trees y Árboles Dinámicos Link-Cut | Splay Tree autoajustable, partición en caminos preferidos, Link-Cut Forest con punteros virtuales (*path-parent*), reversión perezosa, sumas de camino | Potencial Sleator-Tarjan: $O(\log n)$ amortizado por operación<br>9 invariantes estructurales validadas al 100%<br>15,000 operaciones diferenciales con 0 discrepancias frente a BFS |
 | **[Lab 06](lab_06/)** | Algoritmos de Teoría de Números y Aritmética Modular | MCD Euclides clásico y extendido ($ax+by=d$), Inversos modulares, Congruencias lineales, Exponenciación binaria modular ($O(\log b)$) y Teorema Chino del Resto (TCR) analítico con traza | Teorema de Lamé: $k \le 5\log_{10}(\min(a,b)) + 1$<br>Bezout: $ax \equiv d \pmod m$<br>Potencia rápida: $\le 2\lfloor\log_2 b\rfloor$ mults vs $b-1$<br>TCR: solución única $\pmod M$ con $\gcd(m_i, m_j)=1$ |
+| **[Lab 07](lab_07/)** | Primalidad, Grupos y Algoritmos Probabilísticos | División de prueba, test de Fermat, Miller–Rabin con conteo de cuadrados modulares, generación de probables primos (16 a 1024 bits) y análisis de testigos/mentirosos | Error de Miller–Rabin: $\le 4^{-r}$ para $r$ bases independientes<br>Números de Carmichael (561, 1105, 1729) engañan a Fermat<br>Suite de 32 pruebas unitarias al 100% |
+| **[Lab 08](lab_08/)** | FFT, Polinomios y Transformadas sobre Campos Finitos | Convolución directa $\Theta(mn)$, FFT recursiva Cooley–Tukey, FFT iterativa con *bit-reversal*, IFFT por conjugación, NTT/INTT modular ($p = 998244353$ y $p = 17$) | Multiplicación de polinomios en $\Theta(N\log N)$<br>NTT exacta en $\mathbb{F}_p$ (sin redondeo); FFT limitada por la mantisa IEEE 754<br>Suite de 21 pruebas unitarias al 100% |
 
 ---
 
@@ -196,6 +198,41 @@ UNSAAC-algoritmos-avanzados/
 │       ├── figuras/                            # Gráficos empíricos y escudo institucional
 │       └── secciones/                          # Secciones modulares del informe (00 a 06)
 │
+├── lab_07/                                    # Laboratorio 07: Primalidad, Grupos y Algoritmos Probabilísticos
+│   ├── Guia 07.pdf                             # Guía oficial del laboratorio
+│   ├── compilar_informe.bat / modo_en_vivo.bat # Compilación directa y continua del informe
+│   ├── README.md                               # Documentación técnica y distribución por ramas de Lab 07
+│   ├── colab/
+│   │   └── grupo 5 guia 07.ipynb               # Cuaderno autónomo con código y salidas incrustados
+│   ├── python/                                 # primality.py, 32 pruebas, experimentos, auditoría y renderizadores
+│   │   ├── figures/                            # 4 gráficos PNG
+│   │   └── results/                            # 10 CSV auditables
+│   └── latex/                                  # Informe LaTeX (main.tex / main.pdf) y secciones modulares
+│
+├── lab_08/                                    # Laboratorio 08: FFT, Polinomios y Transformadas sobre Campos Finitos
+│   ├── Guia 08.pdf                             # Guía oficial del laboratorio
+│   ├── lab_08(github).pdf                      # Documento técnico de distribución por ramas e integración en GitHub
+│   ├── compilar_informe.bat                    # Lanzador del compilador del informe (Windows)
+│   ├── README.md / AREA_DE_REVISION.md         # Documentación técnica y área de revisión de Lab 08
+│   ├── colab/
+│   │   └── grupo 5 guia 08.ipynb               # Cuaderno autónomo de 51 celdas sin %%writefile, salidas inline
+│   ├── python/                                 # Suite modular en Python 3.11+
+│   │   ├── transforms.py                       # Biblioteca central: convolución, FFT/IFFT, NTT/INTT y contadores
+│   │   ├── ejercicios_resueltos.py             # Ejercicios resueltos 1, 2 y 3 de la guía
+│   │   ├── case_generator.py                   # Generador determinista de casos y semillas
+│   │   ├── test_transforms.py                  # Suite de 21 pruebas unitarias (4 suites)
+│   │   ├── experiments.py                      # Escenarios experimentales A, B y C
+│   │   ├── verify_results.py                   # Auditoría de los 10 CSV y 3 PNG
+│   │   ├── render_report.py                    # Fragmentos LaTeX generados desde código y CSV
+│   │   ├── build_notebook.py                   # Generador y ejecutor del cuaderno Colab
+│   │   ├── figures/                            # 3 gráficos PNG (tiempo, operaciones y error FFT)
+│   │   └── results/                            # 10 CSV de resultados experimentales
+│   └── latex/                                  # Informe académico formal en LaTeX (APA 7, 20 páginas)
+│       ├── main.tex / main.pdf                 # Documento maestro y PDF compilado
+│       ├── compilar.py / compilar.bat          # Validación, renderizado y compilación con pdflatex
+│       ├── figuras/                            # Escudo UNSAAC y gráficos del informe
+│       └── secciones/                          # Secciones modulares del informe (00 a 07)
+│
 ├── .gitignore                                  # Exclusión de temporales y compilados
 ├── requirements.txt                            # Dependencias necesarias
 └── README.md                                   # Documentación principal del repositorio
@@ -289,9 +326,40 @@ python ejercicios_resueltos.py
 * **Cuaderno interactivo oficial:** Abrir `lab_06/colab/grupo 5 guia 06.ipynb` en Google Colab o JupyterLab (autónomo, con suite de 34 pruebas y gráficos inline).
 * **Compilar informe PDF:** Doble clic en `lab_06/compilar_informe.bat` o `lab_06/modo_en_vivo.bat`.
 
+### Laboratorio 07: Primalidad, Grupos y Algoritmos Probabilísticos
+```bash
+cd lab_07
+python python/ejercicios_resueltos.py
+python python/test_primality.py
+python python/experiments.py
+python python/verify_results.py
+```
+* **Cuaderno interactivo oficial:** Abrir `lab_07/colab/grupo 5 guia 07.ipynb` en Google Colab o JupyterLab (autónomo, sin `%%writefile`, con salidas inline).
+* **Compilar informe PDF:** Doble clic en `lab_07/compilar_informe.bat` o `lab_07/modo_en_vivo.bat`.
+
+### Laboratorio 08: FFT, Polinomios y Transformadas sobre Campos Finitos
+```bash
+cd lab_08
+python python/ejercicios_resueltos.py
+python python/test_transforms.py
+python python/experiments.py --max-k 14 --repetitions 10
+python python/verify_results.py
+python latex/compilar.py
+```
+* **Cuaderno interactivo oficial:** Abrir `lab_08/colab/grupo 5 guia 08.ipynb` en Google Colab o JupyterLab (51 celdas autónomas, sin `%%writefile`, con tablas HTML, gráficos SVG y descarga ZIP de evidencias).
+* **Compilar informe PDF:** Doble clic en `lab_08/compilar_informe.bat`.
+* **Distribución por ramas:** El plan de trabajo y el protocolo de integración hacia `main` están documentados en [`lab_08/lab_08(github).pdf`](lab_08/lab_08(github).pdf).
+
+| Integrante | Código | Rama Git | Módulo asignado |
+| :--- | :---: | :---: | :--- |
+| Choquenaira Quispe, Noe Franklin | 133962 | `ramaFranki` | Biblioteca `transforms.py` (FFT/NTT), ejercicios resueltos y secciones teóricas 01 y 03 |
+| Porroa Sivana, Yeni Ruth | 120893 | `ramaYeni` | Generador de casos, suite de 21 pruebas y secciones 02 y 05 (12 preguntas) |
+| Quispe Rimachi, Romario | 164257 | `RamaRomario` | Escenarios A/B/C, 10 CSV, 3 figuras, auditoría y sección 04 |
+| Yaranga Achahui, Aldo | 103179 | `ramaAldo` | Informe LaTeX APA 7 (20 páginas), cuaderno Colab, `build_notebook.py`, `render_report.py` y conclusiones |
+
 ---
 
-## 🔬 Aspectos Teóricos Clave Evaluados en Lab 04, Lab 05 y Lab 06
+## 🔬 Aspectos Teóricos Clave Evaluados en Lab 04 a Lab 08
 
 ### 1. Montículos de Fibonacci y Análisis Amortizado (Lab 04)
 * **Función de Potencial Contable:** Definida como $\Phi(H) = t(H) + 2m(H)$, donde $t(H)$ es el número de árboles en la lista de raíces y $m(H)$ la cantidad de nodos internos marcados.
@@ -311,3 +379,13 @@ python ejercicios_resueltos.py
 * **Exponenciación Binaria Modular (*Square-and-Multiply*):** Reduce el cálculo de $a^b \pmod m$ de $b-1$ multiplicaciones a lo sumo $2\lfloor\log_2 b\rfloor$ multiplicaciones, manteniendo los operandos acotados mediante reducción modular en cada paso y permitiendo cómputos con exponentes de 1024 bits en microsegundos.
 * **Teorema Chino del Resto (TCR) Analítico:** Resuelve sistemas de congruencias $x \equiv a_i \pmod{m_i}$ con módulos coprimos dos a dos mediante la construcción de bases ortogonales $e_i = M_i \cdot (M_i^{-1} \pmod{m_i})$, garantizando una solución única módulo $M = \prod m_i$.
 
+### 4. Primalidad Probabilística: Fermat y Miller–Rabin (Lab 07)
+* **Test de Fermat y Números de Carmichael:** Si $n$ es primo, $a^{n-1} \equiv 1 \pmod n$ para todo $a$ coprimo con $n$. Los números de Carmichael (561, 1105, 1729) satisfacen esta congruencia para toda base coprima siendo compuestos, por lo que Fermat no es una prueba fiable.
+* **Miller–Rabin:** Escribe $n-1 = 2^s d$ con $d$ impar y examina la cadena $a^d, a^{2d}, \dots, a^{2^{s-1}d} \pmod n$. Para un compuesto impar, a lo sumo $1/4$ de las bases son mentirosas, por lo que $r$ bases independientes acotan el error en $4^{-r}$.
+* **Evidencia experimental:** 210 probables primos generados con semillas reproducibles, comparación Fermat vs. Miller–Rabin con las mismas 20 bases y tasas de error empíricas contrastadas con la probabilidad exacta y la cota universal.
+
+### 5. FFT, Multiplicación de Polinomios y NTT sobre Campos Finitos (Lab 08)
+* **Evaluación–multiplicación–interpolación:** El producto de dos polinomios de longitudes $m$ y $n$ (longitud de salida $m+n-1$) se obtiene evaluando en las $N$ raíces de la unidad ($N$ potencia de dos con *zero padding* para evitar el *aliasing* circular), multiplicando punto a punto e interpolando con la transformada inversa: $\Theta(N\log N)$ frente a $\Theta(mn)$ de la convolución directa.
+* **Lemas de cancelación y del signo opuesto:** $\omega_{dN}^{dk} = \omega_N^{k}$ y $\omega_N^{k+N/2} = -\omega_N^{k}$ permiten la recursión de Cooley–Tukey y la versión iterativa *in-place* con permutación por inversión de bits (cada mariposa: 2 productos y 2 sumas/restas).
+* **NTT exacta en $\mathbb{F}_p$:** Con $p = 998244353 = 119\cdot 2^{23}+1$ y generador 3 existe una raíz primitiva de orden $N$ para todo $N \mid 2^{23}$; la NTT entrega residuos exactos sin error de redondeo, y la reconstrucción entera con signo exige $p > 2M$ (o CRT con varios módulos).
+* **Límite numérico de la FFT compleja:** El error antes de redondear crece con $N$ y con la magnitud de los coeficientes; el primer fallo de redondeo y las discrepancias por saturación de la mantisa IEEE 754 se documentan en `results/primer_fallo_fft.csv` y `results/discrepancias.csv`.
