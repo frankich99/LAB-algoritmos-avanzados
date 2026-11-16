@@ -1,0 +1,23 @@
+\begin{lstlisting}[language=Python,caption={Ejercicio resuelto 2: FFT, IFFT y multiplicación}]
+def resuelto_2():
+    a, b = [1, 2, 3], [4, 5]
+    padded = a + [0]
+    roundtrip = ifft(fft(padded))
+    result = multiply_fft(a, b)
+    assert result == [4, 13, 22, 15]
+    assert max(abs(x - y) for x, y in zip(padded, roundtrip)) < 1e-7
+    return {"fft": fft(padded), "ifft_fft": roundtrip,
+            "producto": result, "error_imaginario": max(abs(z.imag) for z in
+             convolution_fft_raw(a, b))}
+\end{lstlisting}
+\noindent\textbf{Resultado de la ejecución:}
+\begin{lstlisting}[style=consolestyle]
+>>> resuelto_2()
+{'fft': [(6+0j), (-1.9999999999999998+2j), (2+0j), (-2-2j)],
+ 'ifft_fft': [(1-0j),
+              (2+5.721188726109833e-18j),
+              (3-0j),
+              -5.721188726109833e-18j],
+ 'producto': [4, 13, 22, 15],
+ 'error_imaginario': 6.661338147750939e-16}
+\end{lstlisting}

@@ -1,0 +1,14 @@
+% !TEX root = ../main.tex
+\section{Conclusiones grupales}
+
+Como integrantes del Grupo 5, tras implementar, instrumentar y evaluar experimentalmente la multiplicación de polinomios mediante convolución directa, Transformada Rápida de Fourier (FFT) y Transformada Teórica de Números (NTT), presentamos las siguientes conclusiones fundamentales:
+
+\begin{enumerate}
+    \item Validamos la equivalencia formal entre la convolución lineal discreta y la multiplicación punto a punto en el dominio de la frecuencia. La estrategia de evaluación, producto e interpolación reduce la complejidad asintótica de $\Theta(n^2)$ a $\Theta(n \log n)$, haciendo viable el tratamiento de polinomios de alto grado en tiempos computacionales prácticos.
+
+    \item Identificamos empíricamente que la superioridad asintótica está supeditada a las constantes ocultas de implementación. Para polinomios de tamaño reducido ($n \le 64$), la convolución directa superó en tiempo de reloj a las transformadas rápidas debido a su mínima sobrecarga de inicialización. Determinamos que el punto de cruce ocurre a partir de $n = 128$, tamaño a partir del cual FFT y NTT demuestran una aceleración contundente, siendo más de 16 veces más rápidas en $n = 2048$.
+
+    \item Comprobamos que la FFT iterativa con reordenamiento por inversión de bits superó a la versión recursiva en la práctica. Al eliminar la sobrecarga de la pila de llamadas del intérprete y evitar la creación continua de sublistas intermedias, la implementación iterativa optimizó la localidad espacial de caché y redujo el tiempo de CPU.
+
+    \item Demostramos la frontera crítica entre precisión flotante y exactitud modular. Mientras la FFT en punto flotante IEEE 754 introduce errores de redondeo que invalidan la reconstrucción entera cuando los coeficientes superan la mantisa de 53 bits ($2^{53} \approx 9 \times 10^{15}$), la NTT sobre el campo primo $\mathbb{F}_p$ ($p = 998244353$) garantiza exactitud matemática absoluta sin ningún error numérico, requiriendo únicamente verificar que $N \mid (p-1)$ y acotar el rango de coeficientes mediante el módulo o el Teorema Chino del Resto.
+\end{enumerate}
