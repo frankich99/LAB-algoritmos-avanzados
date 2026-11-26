@@ -1,0 +1,9 @@
+__pycache__/
+.ruff_cache/
+*.py[cod]
+latex/*.aux
+latex/*.log
+latex/*.toc
+latex/*.out
+latex/compilacion.log
+python/results/*.zip

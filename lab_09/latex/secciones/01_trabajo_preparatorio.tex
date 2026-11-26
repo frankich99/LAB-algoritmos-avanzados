@@ -1,0 +1,24 @@
+% !TEX root = ../main.tex
+\section{Trabajo preparatorio y marco teórico}
+
+\subsection{Compresión sin pérdida y tamaño real serializado}
+Un par codificador--decodificador $(C,D)$ sobre secuencias de octetos es sin pérdida cuando $D(C(x))=x$ para toda entrada $x$. Con tamaño original $S_o=|x|$ y tamaño comprimido total $S_c=|C(x)|$, la razón de compresión y el ahorro se calculan como $R=S_o/S_c$ y $A=(1-S_c/S_o)\cdot 100\text{ \%}$. A diferencia de un flujo ideal de bits, todo archivo autónomo incluye encabezado de formato, metadatos de reconstrucción y relleno al octeto:
+\begin{equation}
+S_c = S_{\text{encabezado}} + S_{\text{metadatos}} + S_{\text{datos}}.
+\end{equation}
+
+\subsection{Entropía de Shannon y longitud promedio}
+Si un símbolo $x_i$ aparece con probabilidad empírica $p_i=f_i/S_o$, su información propia vale $I(x_i)=-\log_2 p_i$ bits. La entropía de Shannon promedia esa información sobre el alfabeto:
+\begin{equation}
+H(X) = -\sum_{p_i > 0} p_i \log_2 p_i.
+\end{equation}
+Dado un código prefijo con longitudes $\ell_i$, la longitud promedio es $L=\sum_i p_i\ell_i$ y la eficiencia relativa resulta $\eta=H(X)/L$. Todo código prefijo obedece la desigualdad de Kraft $\sum_i 2^{-\ell_i}\le 1$, y Huffman binario garantiza:
+\begin{equation}
+H(X) \le L < H(X) + 1.
+\end{equation}
+
+\subsection{Huffman clásico y reconstrucción canónica}
+Huffman construye un árbol binario combinando repetidamente en una cola de prioridad los dos nodos de menor frecuencia. Si hay empates, los códigos individuales cambian según el desempate, pero $L$ y el total de bits codificados no varían. Huffman canónico conserva solo las longitudes $\ell_i$, ordena los símbolos por $(\ell_i, x_i)$ y asigna códigos consecutivos desplazando a la izquierda al aumentar $\ell_i$; basta guardar $(\text{símbolo},\ell_i)$ en lugar del árbol completo.
+
+\subsection{RLE y ventana deslizante LZ77}
+RLE reemplaza secuencias contiguas idénticas por pares $(\text{símbolo},\text{cantidad})$; con $1$ byte de símbolo y $2$ de longitud ($r$ corridas), el cuerpo ocupa $3r$ bytes y solo ahorra si la longitud media de corrida supera $3$. En cambio, LZ77 busca coincidencias de subcadenas dentro de una ventana deslizante previa de tamaño $W$ y emite literales o referencias $(\text{offset},\text{longitud})$, admitiendo solapamiento cuando $\text{offset}<\text{longitud}$.
