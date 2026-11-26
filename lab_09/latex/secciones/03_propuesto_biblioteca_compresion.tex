@@ -1,0 +1,58 @@
+% !TEX root = ../main.tex
+\section{Ejercicio propuesto 1: biblioteca integrada de compresión sin pérdida}
+
+\subsection{Interfaz común y formato binario \texttt{CMP9}}
+El módulo \path{python/compression.py} implementa la clase base \texttt{Compressor} (\texttt{compress}, \texttt{decompress}, \texttt{stats}) y las funciones de la guía (\texttt{frequencies}, \texttt{entropy}, \texttt{build\_huffman\_tree}, \texttt{build\_code\_lengths}, \texttt{canonical\_codes}, \texttt{encode\_bits}, \texttt{decode\_bits}, \texttt{rle\_encode}, \texttt{rle\_decode}, \texttt{lz77\_encode} y \texttt{lz77\_decode}). Toda entrada debe ser \texttt{bytes} (\texttt{str} lanza \texttt{TypeError}) y genera un flujo \texttt{CMP9} v1 (Tabla \ref{tab:formato_cmp9}).
+
+\begin{table}[H]\centering\footnotesize
+\setlength{\tabcolsep}{4pt}
+\caption{Especificación binaria del formato \texttt{CMP9} (versión 1)}\label{tab:formato_cmp9}
+\begin{tabularx}{\textwidth}{@{}p{.19\textwidth}p{.25\textwidth}>{\raggedright\arraybackslash}X@{}}\toprule
+Bloque & Estructura (\texttt{struct}) & Campos y validaciones \\ \midrule
+Encabezado ($6$ B) & \texttt{>4sBB} & \texttt{magic="CMP9"}, \texttt{version=1}, \texttt{alg\_id} ($1$: Huffman, $2$: RLE, $3$: LZ77). Rechaza cabeceras truncadas o incompatibles. \\
+Metadatos Huffman ($11+2k$ B) & \texttt{>QBH} + $k\times\texttt{>BB}$ & \texttt{original\_size}, \texttt{padding\_bits} ($0..7$), $k$ y pares $(\text{símbolo}, \ell_i)$ ordenados por $(\ell_i,\text{símbolo})$. Verifica suma de Kraft y relleno nulo. \\
+Metadatos RLE ($12$ B) & \texttt{>QI} & \texttt{original\_size} y \texttt{num\_runs}. Cuerpo: \texttt{num\_runs} pares \texttt{>BH} (corrida máxima $65\,535$). \\
+Metadatos LZ77 ($16$ B) & \texttt{>QHBBI} & \texttt{original\_size}, \texttt{window\_size} ($4096$), \texttt{min\_match} ($3$), \texttt{max\_match} ($18$) y \texttt{token\_count}. Cuerpo: bloques de $1$ byte de $8$ banderas más literales ($1$ B) o referencias (\texttt{>H}, $2$ B). \\ \bottomrule
+\end{tabularx}\end{table}
+
+\subsection{Detalles de implementación en Huffman, LZ77 y CLI}
+Con un único símbolo distinto, \texttt{build\_huffman\_tree} envuelve la hoja en una raíz de longitud $\ell=1$ (código \texttt{"0"}). Los bits se empaquetan MSB-first en bytes reales; el decodificador valida relleno nulo en el último octeto y se detiene al completar \texttt{original\_size}.
+
+Para LZ77 usamos ventana de $W=4096$ bytes ($12$ bits para $\text{offset}-1$), $\text{min\_match}=3$ y $\text{max\_match}=18$ ($4$ bits para $\text{longitud}-3$). Un índice hash de trigramas (hasta $64$ posiciones recientes) busca la coincidencia más larga y desempata al menor \texttt{offset}. La ventana acotada descarta el historial antiguo sin reiniciar diccionarios y copia byte a byte para admitir solapamientos; sin coincidencias, las banderas añaden solo $12.5$\% de sobrecarga. La CLI \path{python/cli.py} expone \texttt{compress}, \texttt{decompress}, \texttt{roundtrip} e \texttt{inspect}, verificando el SHA-256 al comprimir.
+
+\subsection{Visualización didáctica paso a paso}
+El módulo \path{python/visualize.py} genera automáticamente las imágenes en \path{python/figures/}, presentadas en hojas horizontales dedicadas para máxima legibilidad. En \texttt{b"ABRACADABRA"} ($11$ B) muestra las $4$ uniones, el árbol final y la tabla canónica ($H=2.0404$, $L=2.0909$); en \texttt{b"ABABABCABABA"} ($12$ B) traza ventana y prelectura por token, destacando el solapamiento (\texttt{offset=2, len=4}) del paso 3.
+
+\clearpage
+\paperwidth=297mm
+\paperheight=210mm
+\pdfpagewidth=297mm
+\pdfpageheight=210mm
+\newgeometry{layoutwidth=297mm, layoutheight=210mm, left=2.54cm, right=2.54cm, top=2.54cm, bottom=2.54cm, headheight=15pt}
+\setlength{\headwidth}{\textwidth}
+
+\null\vfill
+\begin{figure}[H]\centering
+\includegraphics[width=0.98\textwidth,height=0.80\textheight,keepaspectratio]{fig_didactica_huffman.png}
+\caption{Traza didáctica de Huffman canónico sobre \texttt{b"ABRACADABRA"}: cola de prioridad, árbol final y códigos canónicos.}\label{fig:didactica_huffman}
+\end{figure}
+\vfill
+
+\clearpage
+\null\vfill
+\begin{figure}[H]\centering
+\includegraphics[width=0.98\textwidth,height=0.80\textheight,keepaspectratio]{fig_didactica_lz77.png}
+\caption{Traza didáctica de LZ77 sobre \texttt{b"ABABABCABABA"}: ventana y prelectura antes y después de cada paso.}\label{fig:didactica_lz77}
+\end{figure}
+\vfill
+
+\clearpage
+\paperwidth=210mm
+\paperheight=297mm
+\pdfpagewidth=210mm
+\pdfpageheight=297mm
+\restoregeometry
+\setlength{\headwidth}{\textwidth}
+
+\subsection{Suite de pruebas automatizadas}
+Las \textbf{24 pruebas \texttt{unittest}} de \path{python/test_compression.py} validan los $14$ casos mínimos de la guía: entrada vacía, un byte (\texttt{0x00}, \texttt{0xFF}), símbolo único repetido, todos los $256$ valores de byte, frecuencias iguales sin dependencia de empates, relleno de bits no nulos y detección de relleno alterado, corrida RLE de $70\,000$ bytes, patrones repetitivos y no repetitivos en LZ77, datos pseudoaleatorios de semilla fija, texto UTF-8 como \texttt{bytes}, múltiples llamadas consecutivas sobre la misma instancia, expansión por metadatos en entradas cortas, truncamiento byte a byte en todos los flujos y ejecución del CLI.
