@@ -1,0 +1,34 @@
+% !TEX root = ../main.tex
+\section{Respuestas a las preguntas de análisis}
+\begin{enumerate}
+\setlength{\itemsep}{.22em}
+\item \textbf{¿Qué tipo de redundancia explota cada algoritmo?}
+Huffman canónico aprovecha frecuencias desiguales entre símbolos asignando códigos más cortos a los más frecuentes. RLE reduce corridas consecutivas de un mismo byte. LZ77 explota repeticiones locales de subcadenas dentro de una ventana deslizante ($4096$ B).
+
+\item \textbf{¿Por qué Huffman puede tener buena longitud promedio y aun así aumentar el tamaño total en un archivo pequeño?}
+Porque el archivo incluye encabezado y tabla canónica: en \texttt{03\_pocos\_bytes.bin} ($16$ B), Huffman logra $H=L=3.50$ bits/símbolo ($7$ B de datos), pero suma $41$ B de encabezado y longitudes de $12$ símbolos, creciendo a $48$ B ($-200$\%).
+
+\item \textbf{¿Qué información debe transmitir el decodificador de Huffman canónico?}
+Versión e identificador de formato, tamaño original $S_o$ para saber dónde detenerse, cantidad de bits de relleno del último byte ($0..7$) y la lista ordenada de pares $(\text{símbolo},\ell_i)$, sin enviar la estructura del árbol.
+
+\item \textbf{¿Qué relación se observó entre entropía y longitud promedio?}
+Se cumplió $H(X) \le L < H(X)+1$ en todo el corpus: $H=4.4170$ frente a $L=4.4543$ en texto español ($\eta=99.16$\%), $H=4.3862$ frente a $L=4.4048$ en patrones repetitivos ($\eta=99.58$\%) y $H=L=8.0$ en distribución uniforme ($\eta=100$\%). Con un único símbolo ($H=0$), fijar longitud mínima $1$ da $L=1.0$.
+
+\item \textbf{¿En qué entradas RLE fue favorable y en cuáles fue desfavorable?}
+En \texttt{04\_unico\_simbolo.bin} ($32\,768$ B de \texttt{0x41}) comprimió a $21$ B ($99.94$\% de ahorro). En texto español ($107\,373$ B, $-198.26$\%), patrones, uniforme, aleatorio y PNG casi triplicó el tamaño porque cada corrida usa $3$ bytes (\texttt{>BH}) y las rachas medias rondan $1$ byte.
+
+\item \textbf{¿Qué parámetros afectan más al método LZ seleccionado?}
+El tamaño de ventana $W$ y el límite $\text{max\_match}$. En texto español, reducir $W$ de $4096$ a $64$ bajó el ahorro de $85.75$\% a $-0.93$\% ($5131$ B a $36\,335$ B); restringir $\text{max\_match}$ de $18$ a $6$ con $W=4096$ lo redujo a $62.97$\% ($13\,332$ B).
+
+\item \textbf{¿Qué costo computacional y espacial presenta cada implementación?}
+RLE corre en $\Theta(n)$ con $\approx 328$~KiB pico en entrada de $32$~KiB. Huffman cuesta $\Theta(n+k\log k)$ al armar el árbol y recorre el flujo bit a bit al descomprimir ($17.8$~ms comprimir y $58.1$~ms descomprimir $36$~KB de texto, $\approx 68$--$127$~KiB pico). LZ77 busca en la ventana al comprimir ($38.1$~ms en texto; $236.1$~ms y $\approx 29.0$~MiB en aleatorio por la tabla de trigramas), pero descomprime en $\Theta(n)$ en $7.2$~ms en texto.
+
+\item \textbf{¿Qué diferencias existen entre medir el núcleo y medir el proceso completo con archivos?}
+El núcleo mide solo el algoritmo en RAM, mientras la prueba E2E suma lectura, apertura y escritura en disco. Esa sobrecarga agregó entre $0.9$ y $13$~ms habituales (hasta $77$~ms en PNG con LZ77) y dominó en RLE sobre \texttt{04\_unico\_simbolo.bin}: $0.03$~ms en memoria frente a $1.63$~ms en disco al descomprimir.
+
+\item \textbf{¿Por qué datos aleatorios o ya comprimidos suelen presentar poco ahorro?}
+Tienen entropía cercana a $8$ bits/byte ($H=7.9938$ en \texttt{08\_aleatorio.bin} y $H=7.9876$ en el PNG DEFLATE) sin repeticiones explotables. Al no haber redundancia, cualquier compresor sin pérdida añade al menos sus metadatos ($+529$~B en Huffman; $+12.5$\% de banderas en LZ77).
+
+\item \textbf{¿Qué algoritmo recomendaría para cada tipo de entrada y con qué limitaciones?}
+RLE para datos con rachas largas del mismo byte (expande hasta $3\times$ si no hay corridas). LZ77 para texto y registros repetitivos ($85.75$\%--$87.87$\% de ahorro, con mayor costo de compresión y RAM). Huffman canónico cuando solo hay sesgo de frecuencias sin frases repetidas. En archivos muy cortos ($<100$ B), aleatorios o ya comprimidos conviene no comprimir.
+\end{enumerate}
