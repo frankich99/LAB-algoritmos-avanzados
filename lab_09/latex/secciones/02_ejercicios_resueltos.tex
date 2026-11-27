@@ -1,0 +1,15 @@
+% !TEX root = ../main.tex
+\section{Ejercicios resueltos}
+Los tres ejercicios de la Sección 8 de la guía se ejecutan y validan con aserciones automáticas en \path{python/ejercicios_resueltos.py}; tanto el código fuente como las salidas reales se insertan directamente desde su ejecución.
+
+\subsection{Resuelto 1: Huffman completo sobre bytes}
+Sobre la entrada \texttt{b"AAAABBCD"} ($8$ bytes), el árbol generado mediante cola de prioridad asigna códigos prefijo con longitudes $1, 2, 3, 3$, logrando $H(X) = L = 1.75$ bits/símbolo ($\eta = 100$\%) y reconstrucción exacta tras $14$ bits codificados.
+\input{secciones/02_resuelto_1_generado.tex}
+
+\subsection{Resuelto 2: reconstrucción Huffman canónica}
+Partiendo de las longitudes $\ell(A)=\ell(B)=\ell(C)=2$ y $\ell(D)=\ell(E)=3$, \texttt{canonical\_codes\_demo} reconstruye de forma determinista los códigos $\{A:\texttt{00}, B:\texttt{01}, C:\texttt{10}, D:\texttt{110}, E:\texttt{111}\}$ y codifica la muestra \texttt{b"AAABBBCCCDE"} ($11$ B) en $24$ bits.
+\input{secciones/02_resuelto_2_generado.tex}
+
+\subsection{Resuelto 3: RLE binario y tamaño total}
+La implementación reproducible con encabezado \texttt{>Q} ($8$ bytes) y corridas \texttt{>BH} ($3$ bytes por par) verifica la fórmula $S_c = 8 + 3r$. Para \texttt{b"AAAAAABBBBCCCCCCCCCC"} ($20$ bytes, $r=3$ corridas), produce exactamente $17$ bytes ($15$\% de ahorro).
+\input{secciones/02_resuelto_3_generado.tex}
