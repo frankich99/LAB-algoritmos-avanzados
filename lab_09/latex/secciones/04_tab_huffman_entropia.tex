@@ -1,0 +1,16 @@
+\begin{table}[H]\centering\scriptsize
+\caption{Entropía de Shannon $H(X)$, longitud promedio $L$, eficiencia $\eta$ y efecto de metadatos en Huffman canónico}\label{tab:huffman_entropia}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}lrrrrrrrr@{}}\toprule
+Archivo & Símb. & $H(X)$ & $L$ & $\eta=H/L$ & Flujo teór. (B) & Datos (B) & Enc.+Meta (B) & Total $S_c$ \\ \midrule
+\texttt{01\_vacio.bin} & 0 & 0.0000 & 0.0000 & 1.0000 & 0 & 0 & 17 & 17 \\
+\texttt{02\_un\_byte.bin} & 1 & 0.0000 & 1.0000 & 0.0000 & 1 & 1 & 19 & 20 \\
+\texttt{03\_pocos\_bytes.bin} & 12 & 3.5000 & 3.5000 & 1.0000 & 7 & 7 & 41 & 48 \\
+\texttt{04\_unico\_simbolo.bin} & 1 & 0.0000 & 1.0000 & 0.0000 & 4096 & 4096 & 19 & 4115 \\
+\texttt{05\_texto\_espanol.txt} & 52 & 4.4170 & 4.4543 & 0.9916 & 20045 & 20045 & 121 & 20166 \\
+\texttt{06\_patrones\_repetitivos.bin} & 31 & 4.3862 & 4.4048 & 0.9958 & 18042 & 18042 & 79 & 18121 \\
+\texttt{07\_uniforme\_256.bin} & 256 & 8.0000 & 8.0000 & 1.0000 & 32768 & 32768 & 529 & 33297 \\
+\texttt{08\_aleatorio.bin} & 256 & 7.9938 & 8.0000 & 0.9992 & 32768 & 32768 & 529 & 33297 \\
+\texttt{09\_imagen\_comprimida.png} & 256 & 7.9876 & 8.0000 & 0.9985 & 36830 & 36830 & 529 & 37359 \\
+\bottomrule\end{tabular}}%
+\end{table}
