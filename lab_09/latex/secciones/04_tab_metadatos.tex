@@ -1,0 +1,21 @@
+\begin{table}[H]\centering\scriptsize
+\caption{Desglose real de encabezado, metadatos y datos codificados (bytes)}\label{tab:metadatos}
+\setlength{\tabcolsep}{4.5pt}
+\begin{tabular}{@{}llrrrrrr@{}}\toprule
+Archivo & Algoritmo & $S_o$ & Encab. & Metadatos & Datos & Relleno (bits) & Total $S_c$ \\ \midrule
+\texttt{03\_pocos\_bytes.bin} & Huffman & 16 & 6 & 35 & 7 & 0 & 48 \\
+\texttt{03\_pocos\_bytes.bin} & RLE & 16 & 6 & 12 & 45 & 0 & 63 \\
+\texttt{03\_pocos\_bytes.bin} & LZ77 & 16 & 6 & 16 & 18 & 0 & 40 \\
+\texttt{04\_unico\_simbolo.bin} & Huffman & 32768 & 6 & 13 & 4096 & 0 & 4115 \\
+\texttt{04\_unico\_simbolo.bin} & RLE & 32768 & 6 & 12 & 3 & 0 & 21 \\
+\texttt{04\_unico\_simbolo.bin} & LZ77 & 32768 & 6 & 16 & 3871 & 0 & 3893 \\
+\texttt{05\_texto\_espanol.txt} & Huffman & 36000 & 6 & 115 & 20045 & 4 & 20166 \\
+\texttt{05\_texto\_espanol.txt} & RLE & 36000 & 6 & 12 & 107355 & 0 & 107373 \\
+\texttt{05\_texto\_espanol.txt} & LZ77 & 36000 & 6 & 16 & 5109 & 0 & 5131 \\
+\texttt{07\_uniforme\_256.bin} & Huffman & 32768 & 6 & 523 & 32768 & 0 & 33297 \\
+\texttt{07\_uniforme\_256.bin} & RLE & 32768 & 6 & 12 & 97938 & 0 & 97956 \\
+\texttt{07\_uniforme\_256.bin} & LZ77 & 32768 & 6 & 16 & 36858 & 0 & 36880 \\
+\texttt{09\_imagen\_comprimida.png} & Huffman & 36830 & 6 & 523 & 36830 & 0 & 37359 \\
+\texttt{09\_imagen\_comprimida.png} & RLE & 36830 & 6 & 12 & 110043 & 0 & 110061 \\
+\texttt{09\_imagen\_comprimida.png} & LZ77 & 36830 & 6 & 16 & 41412 & 0 & 41434 \\
+\bottomrule\end{tabular}\end{table}
