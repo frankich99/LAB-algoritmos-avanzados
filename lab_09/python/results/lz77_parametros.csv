@@ -1,0 +1,9 @@
+archivo,window_size,min_match,max_match,original_bytes,total_bytes,savings_pct,tokens,literales,coincidencias,compression_median_ms
+05_texto_espanol.txt,64,3,18,36000,36335,-0.93,30419,28328,2091,186.453
+05_texto_espanol.txt,512,3,18,36000,27225,24.38,19042,13262,5780,134.94
+05_texto_espanol.txt,4096,3,6,36000,13332,62.97,6510,524,5986,73.666
+05_texto_espanol.txt,4096,3,18,36000,5131,85.75,2649,521,2128,43.417
+06_patrones_repetitivos.bin,64,3,18,32768,32246,1.59,26906,24952,1954,129.694
+06_patrones_repetitivos.bin,512,3,18,32768,4802,85.35,2511,556,1955,42.722
+06_patrones_repetitivos.bin,4096,3,6,32768,11691,64.32,5528,78,5450,50.075
+06_patrones_repetitivos.bin,4096,3,18,32768,3976,87.87,1896,75,1821,45.359

@@ -1,0 +1,10 @@
+parametro,valor
+python_version,3.12.8
+python_implementation,CPython
+os_system,Windows 11
+architecture,AMD64
+cpu_count,12
+repeticiones,10
+lz77_window_size,4096
+lz77_min_match,3
+lz77_max_match,18

@@ -1,0 +1,48 @@
+% !TEX root = ../main.tex
+\section{Ejercicio propuesto 2: pruebas diferenciales y análisis experimental}
+
+\subsection{Corpus de prueba y protocolo de medición}
+Los tres compresores se ejecutaron sobre exactamente los mismos $9$ archivos generados de forma determinista por \path{python/case_generator.py} bajo licencia CC0 (Tabla \ref{tab:corpus}). Las mediciones se realizaron en Python 3.12.8 (CPython, Windows 11 AMD64, 12 núcleos lógicos) siguiendo la Sección 10 de la guía: $1$ corrida de calentamiento y $10$ repeticiones medidas con \texttt{perf\_counter\_ns()} reportando mediana, mínimo y máximo sin lectura de disco ni impresión dentro del intervalo cronometrado. Aparte se midieron las corridas de extremo a extremo (E2E) con lectura y escritura en archivos temporales sobre los $5$ archivos grandes, y la memoria pico mediante \texttt{tracemalloc} en pasadas independientes. Todas las $42$ ejecuciones confirmaron reconstrucción idéntica y coincidencia SHA-256.
+
+\input{secciones/04_tab_corpus.tex}
+
+\subsection{Tamaños comprimidos, razón de compresión y metadatos}
+La Tabla \ref{tab:tamanos} presenta el tamaño total $S_c$, la razón $R$ y el ahorro $A$ para los $9$ archivos, y la Tabla \ref{tab:metadatos} desglosa encabezado, metadatos y datos codificados. Las Figuras \ref{fig:ahorro} y \ref{fig:metadatos} muestran el porcentaje de ahorro y el peso relativo de los metadatos frente a los datos codificados.
+
+\input{secciones/04_tab_tamanos.tex}
+\input{secciones/04_tab_metadatos.tex}
+\input{secciones/04_analisis_dinamico.tex}
+
+\begin{figure}[H]\centering
+\includegraphics[width=.94\textwidth]{fig1_ahorro_por_archivo.png}
+\caption{Porcentaje de ahorro por archivo y algoritmo considerando el tamaño total $S_c$.}\label{fig:ahorro}
+\end{figure}
+
+\begin{figure}[H]\centering
+\includegraphics[width=.94\textwidth]{fig3_desglose_metadatos_datos.png}
+\caption{Desglose entre encabezado+metadatos y datos codificados en escala logarítmica.}\label{fig:metadatos}
+\end{figure}
+
+\subsection{Entropía, longitud promedio y casos de expansión}
+La Tabla \ref{tab:huffman_entropia} y la Figura \ref{fig:entropia} confirman $H(X) \le L < H(X)+1$ en todo el corpus. Aunque Huffman mantiene $\eta > 99$\% en archivos de alta entropía o en entradas cortas con pocos símbolos, el encabezado y la tabla canónica superan cualquier ganancia o la entropía impide comprimir (Tabla \ref{tab:expansion}).
+
+\input{secciones/04_tab_huffman_entropia.tex}
+
+\begin{figure}[H]\centering
+\includegraphics[width=.94\textwidth]{fig4_entropia_vs_longitud_huffman.png}
+\caption{Entropía $H(X)$, longitud promedio $L$ de Huffman y costo total real $8S_c/S_o$.}\label{fig:entropia}
+\end{figure}
+
+\input{secciones/04_tab_expansion.tex}
+
+\subsection{Tiempos en núcleo frente a disco y sensibilidad de LZ77}
+La Tabla \ref{tab:tiempos} reporta mediana, mínimo y máximo en núcleo junto con la mediana E2E en disco y el pico de memoria; la Figura \ref{fig:tiempos} contrasta compresión y descompresión. En descompresión, RLE y LZ77 copian bloques directamente y superan en velocidad a la lectura bit a bit de Huffman en Python puro. La Tabla \ref{tab:lz77_sens} resume cómo el tamaño de ventana $W$ y $\text{max\_match}$ modifican el ahorro y la latencia de LZ77.
+
+\input{secciones/04_tab_tiempos.tex}
+
+\begin{figure}[H]\centering
+\includegraphics[width=.96\textwidth]{fig2_tiempos_compresion_descompresion.png}
+\caption{Tiempos medianos en núcleo (barras) y extremo a extremo con disco ($\blacktriangle$).}\label{fig:tiempos}
+\end{figure}
+
+\input{secciones/04_tab_lz77_sensibilidad.tex}

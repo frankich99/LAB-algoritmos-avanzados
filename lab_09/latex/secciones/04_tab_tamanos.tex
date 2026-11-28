@@ -1,0 +1,16 @@
+\begin{table}[H]\centering\scriptsize
+\caption{Tamaños totales $S_c$ (B), razón $R$ y ahorro $A$ por archivo y algoritmo (reconstrucción exacta 100\,\%)}\label{tab:tamanos}
+\begin{tabular}{@{}lrrrrrrrrrr@{}}\toprule
+Archivo & $S_o$ & \multicolumn{3}{c}{Huffman canónico} & \multicolumn{3}{c}{RLE binario} & \multicolumn{3}{c}{LZ77 (4 KiB)} \\
+\cmidrule(lr){3-5}\cmidrule(lr){6-8}\cmidrule(l){9-11}
+ & (B) & $S_c$ & $R$ & $A$ (\%) & $S_c$ & $R$ & $A$ (\%) & $S_c$ & $R$ & $A$ (\%) \\ \midrule
+\texttt{01\_vacio.bin} & 0 & 17 & 0.00 & 0.0 & 18 & 0.00 & 0.0 & 22 & 0.00 & 0.0 \\
+\texttt{02\_un\_byte.bin} & 1 & 20 & 0.05 & -1900.0 & 21 & 0.05 & -2000.0 & 24 & 0.04 & -2300.0 \\
+\texttt{03\_pocos\_bytes.bin} & 16 & 48 & 0.33 & -200.0 & 63 & 0.25 & -293.8 & 40 & 0.40 & -150.0 \\
+\texttt{04\_unico\_simbolo.bin} & 32768 & 4115 & 7.96 & 87.4 & 21 & 1560.38 & 99.9 & 3893 & 8.42 & 88.1 \\
+\texttt{05\_texto\_espanol.txt} & 36000 & 20166 & 1.79 & 44.0 & 107373 & 0.34 & -198.3 & 5131 & 7.02 & 85.8 \\
+\texttt{06\_patrones\_repetitivos.bin} & 32768 & 18121 & 1.81 & 44.7 & 98136 & 0.33 & -199.5 & 3976 & 8.24 & 87.9 \\
+\texttt{07\_uniforme\_256.bin} & 32768 & 33297 & 0.98 & -1.6 & 97956 & 0.33 & -198.9 & 36880 & 0.89 & -12.6 \\
+\texttt{08\_aleatorio.bin} & 32768 & 33297 & 0.98 & -1.6 & 97947 & 0.33 & -198.9 & 36880 & 0.89 & -12.6 \\
+\texttt{09\_imagen\_comprimida.png} & 36830 & 37359 & 0.99 & -1.4 & 110061 & 0.33 & -198.8 & 41434 & 0.89 & -12.5 \\
+\bottomrule\end{tabular}\end{table}

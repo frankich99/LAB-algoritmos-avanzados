@@ -1,0 +1,21 @@
+archivo,categoria,algoritmo,original_bytes,header_plus_metadata_bytes,data_bytes,total_bytes,incremento_bytes,causa
+01_vacio.bin,vacio,huffman_canonico,0,17,0,17,17,Encabezado y metadatos superan la entrada corta
+01_vacio.bin,vacio,rle,0,18,0,18,18,Encabezado y metadatos superan la entrada corta
+01_vacio.bin,vacio,lz77,0,22,0,22,22,Encabezado y metadatos superan la entrada corta
+02_un_byte.bin,un_byte,huffman_canonico,1,19,1,20,19,Encabezado y metadatos superan la entrada corta
+02_un_byte.bin,un_byte,rle,1,18,3,21,20,Encabezado y metadatos superan la entrada corta
+02_un_byte.bin,un_byte,lz77,1,22,2,24,23,Encabezado y metadatos superan la entrada corta
+03_pocos_bytes.bin,pocos_bytes,huffman_canonico,16,41,7,48,32,Encabezado y metadatos superan la entrada corta
+03_pocos_bytes.bin,pocos_bytes,rle,16,18,45,63,47,Encabezado y metadatos superan la entrada corta
+03_pocos_bytes.bin,pocos_bytes,lz77,16,22,18,40,24,Encabezado y metadatos superan la entrada corta
+05_texto_espanol.txt,texto_espanol,rle,36000,18,107355,107373,71373,Corridas cortas (3 bytes por par exceden 1 byte original)
+06_patrones_repetitivos.bin,patrones_repetitivos,rle,32768,18,98118,98136,65368,Corridas cortas (3 bytes por par exceden 1 byte original)
+07_uniforme_256.bin,uniforme,huffman_canonico,32768,529,32768,33297,529,Alta entropía (~8 bits/símbolo) más tabla canónica de 256 símbolos
+07_uniforme_256.bin,uniforme,rle,32768,18,97938,97956,65188,Corridas cortas (3 bytes por par exceden 1 byte original)
+07_uniforme_256.bin,uniforme,lz77,32768,22,36858,36880,4112,Sin coincidencias >= 3 B: sobrecarga de 1 bit de bandera por literal
+08_aleatorio.bin,aleatorio,huffman_canonico,32768,529,32768,33297,529,Alta entropía (~8 bits/símbolo) más tabla canónica de 256 símbolos
+08_aleatorio.bin,aleatorio,rle,32768,18,97929,97947,65179,Corridas cortas (3 bytes por par exceden 1 byte original)
+08_aleatorio.bin,aleatorio,lz77,32768,22,36858,36880,4112,Sin coincidencias >= 3 B: sobrecarga de 1 bit de bandera por literal
+09_imagen_comprimida.png,ya_comprimido,huffman_canonico,36830,529,36830,37359,529,Alta entropía (~8 bits/símbolo) más tabla canónica de 256 símbolos
+09_imagen_comprimida.png,ya_comprimido,rle,36830,18,110043,110061,73231,Corridas cortas (3 bytes por par exceden 1 byte original)
+09_imagen_comprimida.png,ya_comprimido,lz77,36830,22,41412,41434,4604,Sin coincidencias >= 3 B: sobrecarga de 1 bit de bandera por literal

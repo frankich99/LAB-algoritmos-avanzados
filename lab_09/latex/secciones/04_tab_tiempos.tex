@@ -1,0 +1,24 @@
+\begin{table}[H]\centering\scriptsize
+\caption{Tiempos en núcleo (mín./med./máx., 10 corridas), mediana E2E en disco y memoria pico (\texttt{tracemalloc})}\label{tab:tiempos}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}llrrrrrrrrr@{}}\toprule
+Archivo & Algoritmo & \multicolumn{3}{c}{Compresión núcleo (ms)} & $t_c$ E2E & \multicolumn{3}{c}{Descomp. núcleo (ms)} & $t_d$ E2E & Pico comp. \\
+\cmidrule(lr){3-5}\cmidrule(lr){7-9}
+ & & Mín. & Med. & Máx. & (ms) & Mín. & Med. & Máx. & (ms) & (KiB) \\ \midrule
+\texttt{04\_unico\_simbolo.bin} & Huffman & 8.20 & 8.28 & 11.43 & 10.08 & 12.85 & 13.18 & 19.05 & 15.89 & 10.0 \\
+\texttt{04\_unico\_simbolo.bin} & RLE & 3.43 & 3.62 & 17.05 & 4.95 & 0.01 & 0.03 & 0.07 & 1.63 & 32.3 \\
+\texttt{04\_unico\_simbolo.bin} & LZ77 & 25.89 & 26.47 & 27.75 & 29.61 & 5.40 & 5.52 & 17.99 & 7.56 & 28.1 \\
+\texttt{05\_texto\_espanol.txt} & Huffman & 15.11 & 17.84 & 27.28 & 17.20 & 51.39 & 58.12 & 70.92 & 58.98 & 68.0 \\
+\texttt{05\_texto\_espanol.txt} & RLE & 10.64 & 11.21 & 21.12 & 14.30 & 23.29 & 24.17 & 25.86 & 31.93 & 327.5 \\
+\texttt{05\_texto\_espanol.txt} & LZ77 & 37.42 & 38.12 & 53.69 & 51.10 & 6.88 & 7.20 & 8.12 & 9.83 & 1745.8 \\
+\texttt{06\_patrones\_repetitivos.bin} & Huffman & 12.76 & 13.57 & 19.19 & 14.85 & 43.11 & 44.32 & 60.10 & 48.56 & 51.6 \\
+\texttt{06\_patrones\_repetitivos.bin} & RLE & 9.71 & 10.27 & 21.94 & 11.40 & 21.74 & 22.28 & 35.42 & 25.45 & 296.4 \\
+\texttt{06\_patrones\_repetitivos.bin} & LZ77 & 36.29 & 42.34 & 73.03 & 40.94 & 6.14 & 7.35 & 12.19 & 8.34 & 363.0 \\
+\texttt{08\_aleatorio.bin} & Huffman & 16.67 & 17.36 & 29.03 & 18.60 & 73.41 & 77.53 & 87.33 & 81.52 & 192.5 \\
+\texttt{08\_aleatorio.bin} & RLE & 9.38 & 9.78 & 20.72 & 11.04 & 21.27 & 22.46 & 31.92 & 24.10 & 296.0 \\
+\texttt{08\_aleatorio.bin} & LZ77 & 216.70 & 236.10 & 251.81 & 285.59 & 13.46 & 13.93 & 15.66 & 20.67 & 29705.4 \\
+\texttt{09\_imagen\_comprimida.png} & Huffman & 18.79 & 19.69 & 24.03 & 21.69 & 81.91 & 87.01 & 94.45 & 98.17 & 202.1 \\
+\texttt{09\_imagen\_comprimida.png} & RLE & 10.67 & 11.76 & 20.84 & 12.66 & 23.82 & 33.06 & 57.61 & 27.89 & 332.7 \\
+\texttt{09\_imagen\_comprimida.png} & LZ77 & 229.53 & 257.72 & 272.46 & 334.76 & 15.36 & 16.19 & 23.24 & 22.66 & 33229.3 \\
+\bottomrule\end{tabular}}%
+\end{table}

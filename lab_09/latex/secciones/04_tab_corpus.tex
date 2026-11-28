@@ -1,0 +1,14 @@
+\begin{table}[H]\centering\footnotesize
+\caption{Conjunto mínimo de datos utilizado, tamaño original y procedencia}\label{tab:corpus}
+\begin{tabularx}{\textwidth}{@{}llrl>{\raggedright\arraybackslash}X@{}}\toprule
+Archivo & Categoría & $S_o$ (B) & Licencia & Descripción y procedencia \\ \midrule
+\texttt{01\_vacio.bin} & vacio & 0 & CC0 & Archivo vacío de 0 bytes \\
+\texttt{02\_un\_byte.bin} & un\_byte & 1 & CC0 & Archivo de 1 byte (0x5A) \\
+\texttt{03\_pocos\_bytes.bin} & pocos\_bytes & 16 & CC0 & Entrada corta de 16 bytes (sobrecarga de metadatos) \\
+\texttt{04\_unico\_simbolo.bin} & unico\_simbolo & 32\,768 & CC0 & Único símbolo 0x41 repetido 32 768 veces \\
+\texttt{05\_texto\_espanol.txt} & texto\_espanol & 36\,000 & CC0 & Texto natural académico en español UTF-8 (36 000 bytes) \\
+\texttt{06\_patrones\_repetitivos.bin} & patrones\_repetitivos & 32\,768 & CC0 & Registros estructurados con subcadenas repetitivas (32 768 bytes) \\
+\texttt{07\_uniforme\_256.bin} & uniforme & 32\,768 & CC0 & Distribución uniforme de 256 valores (128 copias c/u\, semilla 20260901) \\
+\texttt{08\_aleatorio.bin} & aleatorio & 32\,768 & CC0 & Bytes pseudoaleatorios reproducibles (semilla 20260902\, 32 768 bytes) \\
+\texttt{09\_imagen\_comprimida.png} & ya\_comprimido & 36\,830 & CC0 & Imagen PNG RGB 128x96 comprimida internamente con zlib nivel 9 \\
+\bottomrule\end{tabularx}\end{table}

@@ -1,0 +1,10 @@
+archivo,categoria,original_bytes,simbolos_distintos,entropy_H,avg_length_L,efficiency_eta,redundancy_L_minus_H,theoretical_payload_bytes,actual_data_bytes,header_plus_metadata_bytes,total_bytes,expansion_por_metadatos
+01_vacio.bin,vacio,0,0,0.0,0.0,1.0,0.0,0,0,17,17,True
+02_un_byte.bin,un_byte,1,1,0.0,1.0,0.0,1.0,1,1,19,20,True
+03_pocos_bytes.bin,pocos_bytes,16,12,3.5,3.5,1.0,0.0,7,7,41,48,True
+04_unico_simbolo.bin,unico_simbolo,32768,1,0.0,1.0,0.0,1.0,4096,4096,19,4115,False
+05_texto_espanol.txt,texto_espanol,36000,52,4.417049,4.454333,0.99163,0.037284,20045,20045,121,20166,False
+06_patrones_repetitivos.bin,patrones_repetitivos,32768,31,4.386179,4.404755,0.995783,0.018576,18042,18042,79,18121,False
+07_uniforme_256.bin,uniforme,32768,256,8.0,8.0,1.0,0.0,32768,32768,529,33297,True
+08_aleatorio.bin,aleatorio,32768,256,7.993791,8.0,0.999224,0.006209,32768,32768,529,33297,True
+09_imagen_comprimida.png,ya_comprimido,36830,256,7.987646,8.0,0.998456,0.012354,36830,36830,529,37359,True
