@@ -1,0 +1,12 @@
+\begin{table}[H]\centering\footnotesize
+\caption{Casos representativos donde el algoritmo expande el tamaño ($S_c > S_o$)}\label{tab:expansion}
+\begin{tabularx}{\textwidth}{@{}llrrr>{\raggedright\arraybackslash}X@{}}\toprule
+Archivo & Algoritmo & $S_o$ (B) & $S_c$ (B) & Incremento & Causa estructural \\ \midrule
+\texttt{03\_pocos\_bytes.bin} & Huffman & 16 & 48 & +32 B & Encabezado y metadatos superan la entrada corta \\
+\texttt{03\_pocos\_bytes.bin} & RLE & 16 & 63 & +47 B & Encabezado y metadatos superan la entrada corta \\
+\texttt{05\_texto\_espanol.txt} & RLE & 36000 & 107373 & +71373 B & Corridas cortas (3 bytes por par exceden 1 byte original) \\
+\texttt{07\_uniforme\_256.bin} & Huffman & 32768 & 33297 & +529 B & Alta entropía (~8 bits/símbolo) más tabla canónica de 256 símbolos \\
+\texttt{08\_aleatorio.bin} & LZ77 & 32768 & 36880 & +4112 B & Sin coincidencias >= 3 B: sobrecarga de 1 bit de bandera por literal \\
+\texttt{09\_imagen\_comprimida.png} & Huffman & 36830 & 37359 & +529 B & Alta entropía (~8 bits/símbolo) más tabla canónica de 256 símbolos \\
+\texttt{09\_imagen\_comprimida.png} & RLE & 36830 & 110061 & +73231 B & Corridas cortas (3 bytes por par exceden 1 byte original) \\
+\bottomrule\end{tabularx}\end{table}
