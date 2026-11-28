@@ -1,0 +1,14 @@
+\begin{table}[H]\centering\scriptsize
+\caption{Sensibilidad de LZ77 al tamaño de ventana $W$ y longitud máxima de coincidencia}\label{tab:lz77_sens}
+\setlength{\tabcolsep}{4.5pt}
+\begin{tabular}{@{}lrrrrrrr@{}}\toprule
+Archivo & Ventana $W$ & $\text{max\_match}$ & $S_c$ (B) & Ahorro (\%) & Literales & Coincid. & $t_c$ (ms) \\ \midrule
+\texttt{05\_texto\_espanol.txt} & 64 & 18 & 36335 & -0.93 & 28328 & 2091 & 186.45 \\
+\texttt{05\_texto\_espanol.txt} & 512 & 18 & 27225 & 24.38 & 13262 & 5780 & 134.94 \\
+\texttt{05\_texto\_espanol.txt} & 4096 & 6 & 13332 & 62.97 & 524 & 5986 & 73.67 \\
+\texttt{05\_texto\_espanol.txt} & 4096 & 18 & 5131 & 85.75 & 521 & 2128 & 43.42 \\
+\texttt{06\_patrones\_repetitivos.bin} & 64 & 18 & 32246 & 1.59 & 24952 & 1954 & 129.69 \\
+\texttt{06\_patrones\_repetitivos.bin} & 512 & 18 & 4802 & 85.35 & 556 & 1955 & 42.72 \\
+\texttt{06\_patrones\_repetitivos.bin} & 4096 & 6 & 11691 & 64.32 & 78 & 5450 & 50.08 \\
+\texttt{06\_patrones\_repetitivos.bin} & 4096 & 18 & 3976 & 87.87 & 75 & 1821 & 45.36 \\
+\bottomrule\end{tabular}\end{table}
