@@ -1,0 +1,16 @@
+archivo,algoritmo,original_bytes,total_bytes,core_comp_ms,e2e_comp_ms,overhead_io_comp_ms,core_decomp_ms,e2e_decomp_ms,overhead_io_decomp_ms,exact_match
+04_unico_simbolo.bin,huffman_canonico,32768,4115,8.2769,10.0758,1.7989,13.1776,15.8864,2.7088,True
+04_unico_simbolo.bin,rle,32768,21,3.6165,4.9478,1.3313,0.0327,1.626,1.5933,True
+04_unico_simbolo.bin,lz77,32768,3893,26.4722,29.6135,3.1413,5.5227,7.5555,2.0328,True
+05_texto_espanol.txt,huffman_canonico,36000,20166,17.8377,17.1952,-0.6425,58.1172,58.9803,0.8631,True
+05_texto_espanol.txt,rle,36000,107373,11.2066,14.3038,3.0972,24.1668,31.9342,7.7674,True
+05_texto_espanol.txt,lz77,36000,5131,38.1233,51.1031,12.9798,7.1979,9.83,2.6321,True
+06_patrones_repetitivos.bin,huffman_canonico,32768,18121,13.5737,14.8499,1.2762,44.3212,48.5598,4.2386,True
+06_patrones_repetitivos.bin,rle,32768,98136,10.2746,11.4025,1.1279,22.2834,25.4544,3.171,True
+06_patrones_repetitivos.bin,lz77,32768,3976,42.3435,40.9433,-1.4002,7.3523,8.3405,0.9882,True
+08_aleatorio.bin,huffman_canonico,32768,33297,17.3621,18.6046,1.2425,77.5289,81.522,3.9931,True
+08_aleatorio.bin,rle,32768,97947,9.7816,11.0369,1.2553,22.4591,24.0981,1.639,True
+08_aleatorio.bin,lz77,32768,36880,236.1043,285.5926,49.4883,13.9334,20.6696,6.7362,True
+09_imagen_comprimida.png,huffman_canonico,36830,37359,19.6881,21.6934,2.0053,87.0085,98.168,11.1595,True
+09_imagen_comprimida.png,rle,36830,110061,11.7594,12.6583,0.8989,33.0622,27.8929,-5.1692,True
+09_imagen_comprimida.png,lz77,36830,41434,257.7217,334.7598,77.0381,16.194,22.6591,6.4651,True
